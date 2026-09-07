@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://homy.framer.media/sitemap.xml
