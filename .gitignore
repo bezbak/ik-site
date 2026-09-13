@@ -1,0 +1,7 @@
+# Raw/source assets — not referenced by the site, only used to produce the
+# optimized files in img/ and video/. Huge (700+ MB), keep out of git.
+assets/Avat 365/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
