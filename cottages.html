@@ -7,9 +7,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <meta name="generator" content="Framer d22cd96">
-  <title>AVAT 365 — курортный комплекс на Иссык-Куле</title>
+  <title>Коттеджи AVAT 365 — планировки на Иссык-Куле</title>
   <meta name="description"
-    content="AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.">
+    content="Частные коттеджи AVAT 365 на Иссык-Куле: 77,22, 110,89 и 144,89 м². Планировки, цены и инфраструктура курортного комплекса в Чон-Сары-Ое.">
   <meta name="framer-search-index"
     content="assets/framerusercontent.com/sites/4M3N8CQazo8JSONb63tMrT/searchIndex-3UTFMV4Jg4QZ.json">
   <meta name="framer-search-index-fallback"
@@ -21,19 +21,19 @@
   <link rel="apple-touch-icon" href="assets/framerusercontent.com/images/G7lDIA4ifkbEuCxtUyJ4bPWkXtI.png">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="AVAT 365 — курортный комплекс на Иссык-Куле">
+  <meta property="og:title" content="Коттеджи AVAT 365 — планировки на Иссык-Куле">
   <meta property="og:description"
-    content="AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.">
+    content="Частные коттеджи AVAT 365 на Иссык-Куле: 77,22, 110,89 и 144,89 м². Планировки, цены и инфраструктура курортного комплекса в Чон-Сары-Ое.">
   <meta property="og:image" content="assets/framerusercontent.com/assets/fDMSmrokCqsy1Za03q9Iqimvwk.png">
   <!-- X -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AVAT 365 — курортный комплекс на Иссык-Куле">
+  <meta name="twitter:title" content="Коттеджи AVAT 365 — планировки на Иссык-Куле">
   <meta name="twitter:description"
-    content="AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.">
+    content="Частные коттеджи AVAT 365 на Иссык-Куле: 77,22, 110,89 и 144,89 м². Планировки, цены и инфраструктура курортного комплекса в Чон-Сары-Ое.">
   <meta name="twitter:image" content="assets/framerusercontent.com/assets/fDMSmrokCqsy1Za03q9Iqimvwk.png">
 
 
-  <link rel="canonical" href="index.html">
+  <link rel="canonical" href="cottages.html">
   <meta property="og:url" content="https://homy.framer.media/"><!-- Start of headStart -->
 
   <!-- End of headStart -->
@@ -14183,6 +14183,112 @@
       } else {
         window.addEventListener('load', function () {
           patch(); setTimeout(patch, 300); setTimeout(patch, 1200); setTimeout(patch, 2500);
+        });
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var PAGE_TYPE = 'cottage';
+      var WHATSAPP_NUMBER = '996222170399';
+      var COTTAGE_IMAGES = ['plan-cottage-77.png', 'plan-cottage-110.png', 'plan-cottage-145.jpg'];
+      var APARTMENT_IMAGES = ['plan-apt-45.jpg', 'plan-apt-93.jpg'];
+
+      function waLink(text) {
+        return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
+      }
+
+      function forceLink(el, url, newTab) {
+        if (!el) return;
+        el.setAttribute('href', url);
+        if (newTab) {
+          el.setAttribute('target', '_blank');
+          el.setAttribute('rel', 'noopener');
+        } else {
+          el.removeAttribute('target');
+        }
+        if (!el.dataset.avatForced) {
+          el.dataset.avatForced = '1';
+          el.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+            var href = el.getAttribute('href');
+            if (el.getAttribute('target') === '_blank') {
+              window.open(href, '_blank', 'noopener');
+            } else {
+              window.location.href = href;
+            }
+          }, true);
+        }
+      }
+
+      function setHeroButtons() {
+        var hero = document.getElementById('hero');
+        if (!hero) return;
+        var waBtn = hero.querySelector('a[data-framer-name="Main/Black"]');
+        if (waBtn) {
+          forceLink(waBtn, waLink(PAGE_TYPE === 'cottage' ? 'Здравствуйте! Интересуют планировки коттеджей AVAT 365.' : 'Здравствуйте! Интересуют планировки апартаментов AVAT 365.'), true);
+          var p = waBtn.querySelector('p');
+          if (p) p.textContent = 'WhatsApp';
+        }
+        var planBtn = hero.querySelector('a[data-framer-name="Outline"]');
+        if (planBtn) {
+          forceLink(planBtn, '#planning', false);
+          var p2 = planBtn.querySelector('p');
+          if (p2) p2.textContent = 'Планировки';
+        }
+      }
+
+      function setPlanningAnchor() {
+        var section = document.querySelector('[data-framer-name="Property Listing Section"]');
+        if (section && !section.id) section.id = 'planning';
+      }
+
+      function filterAndConvertCards() {
+        var container = document.querySelector('.framer-104wil7');
+        if (!container) return;
+        var keep = PAGE_TYPE === 'cottage' ? COTTAGE_IMAGES : APARTMENT_IMAGES;
+        Array.prototype.slice.call(container.children).forEach(function (card) {
+          var img = card.querySelector('img');
+          var fname = img ? img.getAttribute('src').split('/').pop() : '';
+          if (keep.indexOf(fname) === -1) {
+            if (card.parentNode) card.parentNode.removeChild(card);
+            return;
+          }
+          var link = card.querySelector('a[data-framer-name="Property card"], a[data-framer-name="Mobile"]');
+          if (!link) return;
+          var titleP = card.querySelector('[data-framer-name="Bottom Wrapper"] p');
+          var title = titleP ? titleP.textContent.trim() : '';
+          forceLink(link, waLink('Здравствуйте! Интересует ' + title + ' в AVAT 365.'), true);
+          var statusP = card.querySelector('[data-framer-name="Property Status"] p');
+          if (statusP) statusP.textContent = 'Написать в WhatsApp';
+        });
+      }
+
+      function setCrossLinkButton() {
+        var target = PAGE_TYPE === 'cottage' ? 'apartments.html#planning' : 'cottages.html#planning';
+        var label = PAGE_TYPE === 'cottage' ? 'Смотреть апартаменты' : 'Смотреть коттеджи';
+        var btn = document.querySelector('a[name="Explore Button"]');
+        if (btn) {
+          forceLink(btn, target, false);
+          var p = btn.querySelector('p');
+          if (p) p.textContent = label;
+        }
+      }
+
+      function patchVariant() {
+        setHeroButtons();
+        setPlanningAnchor();
+        filterAndConvertCards();
+        setCrossLinkButton();
+      }
+
+      if (document.readyState === 'complete') {
+        patchVariant(); setTimeout(patchVariant, 350); setTimeout(patchVariant, 1300); setTimeout(patchVariant, 2600);
+      } else {
+        window.addEventListener('load', function () {
+          patchVariant(); setTimeout(patchVariant, 350); setTimeout(patchVariant, 1300); setTimeout(patchVariant, 2600);
         });
       }
     })();
