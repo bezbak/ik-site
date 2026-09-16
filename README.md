@@ -42,6 +42,23 @@ python manage.py runserver
 python manage.py seed_content
 ```
 
+## Деплой на Railway
+
+1. Создать проект на railway.app, подключить этот репозиторий (Nixpacks сам
+   найдёт `requirements.txt` и `Procfile`).
+2. Attach a Volume к сервису, точка монтирования, например, `/data`.
+   Без этого база и загруженные файлы будут стираться при каждом деплое.
+3. Переменные окружения сервиса:
+   - `DJANGO_SECRET_KEY` — длинная случайная строка.
+   - `DJANGO_DEBUG` = `0`
+   - `DJANGO_ALLOWED_HOSTS` = домен(ы) через запятую, например
+     `avat365.up.railway.app,avat365.com`
+   - `DJANGO_DB_PATH` = `/data/db.sqlite3`
+   - `DJANGO_MEDIA_ROOT` = `/data/media`
+4. Деплой: `Procfile` при старте прогоняет `migrate`, `collectstatic` и
+   поднимает `gunicorn`. После первого деплоя зайти в Railway Shell
+   (или `railway run`) и один раз выполнить `python manage.py createsuperuser`.
+
 ## Технические детали (для разработчика)
 
 - Framer-экспорт остаётся в JS-бандле сайта и на клиенте **полностью

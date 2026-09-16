@@ -72,11 +72,13 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database.
 # SQLite by default (fine for a low-traffic brochure site with an admin panel).
-# For Postgres in production, set DATABASE_URL and add dj-database-url later.
+# On a host with an ephemeral filesystem (e.g. Railway), set DJANGO_DB_PATH to a
+# path on a mounted persistent volume so the database survives redeploys.
+# For Postgres, set DATABASE_URL and add dj-database-url later.
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.environ.get("DJANGO_DB_PATH", str(BASE_DIR / "db.sqlite3")),
     }
 }
 
@@ -102,8 +104,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 WHITENOISE_ROOT = BASE_DIR / "public"
 
 # Admin-uploaded media (floor plans, gallery photos, PDFs).
+# Point DJANGO_MEDIA_ROOT at a mounted persistent volume in production, or
+# uploads will be lost on the next deploy/restart.
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = Path(os.environ.get("DJANGO_MEDIA_ROOT", str(BASE_DIR / "media")))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
