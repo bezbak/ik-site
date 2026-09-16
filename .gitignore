@@ -12,3 +12,7 @@ __pycache__/
 db.sqlite3
 /media/
 .env
+
+# Cloudflare Worker / Containers
+node_modules/
+.wrangler/
