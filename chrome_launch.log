@@ -1,0 +1,11 @@
+
+DevTools listening on ws://127.0.0.1:9333/devtools/browser/f475b5b7-3c08-4832-86ab-aad4602957d2
+[25052:20072:0917/214450.097:ERROR:components\device_event_log\device_event_log_impl.cc:211] [21:44:50.098] USB: usb_service_win.cc:108 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Элемент не найден. (0x490)
+[25052:20416:0917/214452.922:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+Created TensorFlow Lite XNNPACK delegate for CPU.
+[25052:20416:0917/214519.629:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[25052:20416:0917/214602.111:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[25052:20416:0917/214755.563:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[25052:20072:0917/215019.116:ERROR:components\device_event_log\device_event_log_impl.cc:211] [21:50:19.110] USB: usb_service_win.cc:108 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Элемент не найден. (0x490)
+[25052:20416:0917/215037.542:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[25052:20416:0917/215815.697:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
