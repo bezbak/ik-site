@@ -14,6 +14,10 @@ class SiteSettings(models.Model):
         max_length=32, default="996222170399",
         help_text="Только цифры, без + и пробелов (используется для ссылок wa.me)",
     )
+    address = models.CharField(
+        max_length=200, blank=True, default="Токтогула 147, кабинет 40",
+        verbose_name="Адрес офиса",
+    )
 
     class Meta:
         verbose_name = "Контакты сайта"
@@ -54,6 +58,22 @@ class Property(models.Model):
     )
     floor_plan_image = models.ImageField(upload_to="properties/plans/", verbose_name="Изображение планировки")
     description = models.TextField(blank=True, verbose_name="Описание для детальной страницы")
+    price = models.CharField(
+        max_length=60, blank=True, verbose_name="Цена",
+        help_text="Например «от $45 000» или «По запросу» — если пусто, цена не показывается",
+    )
+    location = models.CharField(
+        max_length=200, blank=True, verbose_name="Адрес/локация",
+        default="Кыргызстан, Иссык-Куль, с. Чон-Сары-Ой",
+    )
+    amenities = models.CharField(
+        max_length=300, blank=True, verbose_name="Удобства",
+        help_text="Через запятую, например: Терраса, Парковка, Кладовая",
+    )
+    video = models.FileField(
+        upload_to="properties/video/", blank=True, null=True, verbose_name="Видео (mp4)",
+        help_text="Необязательно — короткий видео-обзор для галереи на детальной странице",
+    )
     whatsapp_message = models.CharField(
         max_length=300, blank=True,
         help_text="Если пусто — сформируется автоматически из типа и площади",
@@ -88,6 +108,10 @@ class Property(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalog:property_detail", kwargs={"slug": self.slug})
+
+    @property
+    def amenities_list(self):
+        return [a.strip() for a in self.amenities.split(",") if a.strip()]
 
 
 class PropertyImage(models.Model):
@@ -137,6 +161,30 @@ class Document(models.Model):
             except (OSError, ValueError):
                 return ""
         return ""
+
+
+class Lead(models.Model):
+    """A contact-form submission from the site's lead-capture CTAs."""
+
+    full_name = models.CharField(max_length=150, verbose_name="ФИО")
+    phone = models.CharField(max_length=32, verbose_name="Телефон (WhatsApp)")
+    property_type = models.CharField(
+        max_length=16, choices=Property.TYPE_CHOICES, verbose_name="Интересует",
+    )
+    source_page = models.CharField(
+        max_length=200, blank=True, verbose_name="Источник",
+        help_text="Страница, с которой отправлена заявка",
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата заявки")
+    is_processed = models.BooleanField(default=False, verbose_name="Обработана")
+
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявки"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.full_name} — {self.phone}"
 
 
 class FAQItem(models.Model):

@@ -1,0 +1,82 @@
+<main class="avat-contact-main" id="avat-custom-root">
+  <style>
+    .avat-contact-section{padding:140px 0 100px;display:flex;justify-content:center;background:#fff}
+    .avat-contact-inner{width:100%;max-width:1100px;padding:0 32px;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+    .avat-contact-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid #637185;border-radius:10px;padding:6px 13px;font-size:12px;letter-spacing:.02em;color:#637185;font-weight:500;margin-bottom:22px}
+    .avat-contact-tag i{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+    .avat-contact-inner h1{font-size:clamp(32px,4vw,48px);line-height:1.1;letter-spacing:-.02em;color:#17212E;margin:0 0 18px;font-weight:500}
+    .avat-contact-inner>div:first-child>p{font-size:17px;line-height:1.55;color:#637185;margin:0 0 36px;max-width:420px}
+    .avat-contact-info{display:flex;flex-direction:column;gap:20px}
+    .avat-contact-info-item{display:flex;gap:16px;align-items:flex-start}
+    .avat-contact-info-icon{width:44px;height:44px;border-radius:12px;background:#F6F6F6;display:flex;align-items:center;justify-content:center;color:#19458B;flex-shrink:0}
+    .avat-contact-info-item h4{margin:0 0 4px;font-size:14px;color:#637185;font-weight:500}
+    .avat-contact-info-item a,.avat-contact-info-item p{margin:0;font-size:17px;color:#17212E;font-weight:500;text-decoration:none}
+    .avat-contact-info-item a:hover{color:#19458B}
+    .avat-contact-card{background:#F6F6F6;border-radius:24px;padding:36px;box-sizing:border-box}
+    .avat-contact-card h3{margin:0 0 8px;font-size:22px;color:#17212E;font-weight:600}
+    .avat-contact-card>p{margin:0 0 24px;font-size:14px;color:#637185;line-height:1.5}
+    .avat-contact-form label{display:block;font-size:13px;color:#637185;margin-bottom:16px}
+    .avat-contact-form input[type=text],.avat-contact-form input[type=tel]{display:block;width:100%;margin-top:6px;padding:14px 16px;border:1px solid #DCE5F0;border-radius:12px;font-size:15px;color:#17212E;box-sizing:border-box;font-family:inherit;background:#fff}
+    .avat-contact-form fieldset{border:0;padding:0;margin:0 0 22px;display:flex;gap:16px;flex-wrap:wrap}
+    .avat-contact-form legend{font-size:13px;color:#637185;margin-bottom:8px;padding:0}
+    .avat-contact-radio{display:flex!important;align-items:center;gap:6px;font-size:14px!important;color:#17212E!important;margin:0!important}
+    .avat-contact-radio input{width:auto!important}
+    .avat-contact-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+    .avat-contact-submit{width:100%;background:#10284E;color:#fff;border:0;padding:16px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit}
+    .avat-contact-submit:hover{background:#19458B}
+    .avat-contact-status{margin:14px 0 0;font-size:13px;color:#637185;min-height:18px}
+    .avat-contact-status.is-error{color:#c0392b}
+    .avat-contact-status.is-ok{color:#1a7f4b}
+    @media (max-width:809px){.avat-contact-inner{grid-template-columns:1fr;gap:36px;padding:0 20px}.avat-contact-section{padding:110px 0 60px}.avat-contact-card{padding:26px}}
+  </style>
+  <section class="avat-contact-section">
+    <div class="avat-contact-inner">
+      <div>
+        <div class="avat-contact-tag"><i></i>КОНТАКТЫ</div>
+        <h1>Свяжитесь с нами</h1>
+        <p>Расскажем подробнее о планировках, ценах и условиях приобретения апартаментов и коттеджей AVAT 365 на Иссык-Куле.</p>
+        <div class="avat-contact-info">
+          <div class="avat-contact-info-item">
+            <span class="avat-contact-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div>
+              <h4>Телефон</h4>
+              <a href="tel:{{ site_settings.phone_number }}">{{ site_settings.phone_number }}</a>
+            </div>
+          </div>
+          <div class="avat-contact-info-item">
+            <span class="avat-contact-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div>
+              <h4>WhatsApp</h4>
+              <a href="https://wa.me/{{ site_settings.whatsapp_number }}" target="_blank" rel="noopener">Написать в WhatsApp</a>
+            </div>
+          </div>
+          {% if site_settings.address %}
+          <div class="avat-contact-info-item">
+            <span class="avat-contact-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.6"/></svg></span>
+            <div>
+              <h4>Адрес</h4>
+              <p>{{ site_settings.address }}</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="avat-contact-card">
+        <h3>Оставить заявку</h3>
+        <p>Оставьте контакты — мы свяжемся с вами в WhatsApp и поможем подобрать планировку.</p>
+        <form class="avat-contact-form" data-avat-lead-form>
+          <label>Ваше имя<input type="text" name="full_name" required autocomplete="name"></label>
+          <label>Телефон (WhatsApp)<input type="tel" name="phone" required autocomplete="tel" placeholder="+996 700 000 000"></label>
+          <fieldset>
+            <legend>Что интересует?</legend>
+            <label class="avat-contact-radio"><input type="radio" name="property_type" value="apartment" checked>Апартаменты</label>
+            <label class="avat-contact-radio"><input type="radio" name="property_type" value="cottage">Коттедж</label>
+          </fieldset>
+          <input type="text" name="website" class="avat-contact-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="submit" class="avat-contact-submit">Отправить заявку</button>
+          <p class="avat-contact-status" data-avat-lead-status aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>

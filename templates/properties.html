@@ -7,26 +7,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <meta name="generator" content="Framer d22cd96">
-  <title>{{ property.title }} — AVAT 365</title>
+  <title>Планировки апартаментов и коттеджей — AVAT 365</title>
   <meta name="description"
-    content="{{ property.title }}, {{ property.room_line }}{% if property.price %}, {{ property.price }}{% endif %}. Планировка в резорт-комплексе AVAT 365 на Иссык-Куле, {{ property.location }}.">
+    content="Каталог планировок AVAT 365 на Иссык-Куле: апартаменты и коттеджи от 45,87 до 144,89 м². Цены, фото и инфраструктура курортного комплекса в Чон-Сары-Ое.">
   <link href="/img/favicon.png" rel="icon" type="image/png">
   <link rel="apple-touch-icon" href="/img/favicon.png">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ property.title }} — AVAT 365">
+  <meta property="og:title" content="Планировки апартаментов и коттеджей — AVAT 365">
   <meta property="og:description"
-    content="{{ property.title }}, {{ property.room_line }}{% if property.price %}, {{ property.price }}{% endif %}. Планировка в резорт-комплексе AVAT 365 на Иссык-Куле, {{ property.location }}.">
-  <meta property="og:image" content="{% if property.floor_plan_image %}{{ property.floor_plan_image.url }}{% else %}/img/logo-blue.png{% endif %}">
+    content="Каталог планировок AVAT 365 на Иссык-Куле: апартаменты и коттеджи от 45,87 до 144,89 м². Цены, фото и инфраструктура курортного комплекса в Чон-Сары-Ое.">
+  <meta property="og:image" content="/img/logo-blue.png">
   <!-- X -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ property.title }} — AVAT 365">
+  <meta name="twitter:title" content="Планировки апартаментов и коттеджей — AVAT 365">
   <meta name="twitter:description"
-    content="{{ property.title }}, {{ property.room_line }}{% if property.price %}, {{ property.price }}{% endif %}. Планировка в резорт-комплексе AVAT 365 на Иссык-Куле, {{ property.location }}.">
-  <meta name="twitter:image" content="{% if property.floor_plan_image %}{{ property.floor_plan_image.url }}{% else %}/img/logo-blue.png{% endif %}">
+    content="Каталог планировок AVAT 365 на Иссык-Куле: апартаменты и коттеджи от 45,87 до 144,89 м². Цены, фото и инфраструктура курортного комплекса в Чон-Сары-Ое.">
+  <meta name="twitter:image" content="/img/logo-blue.png">
 
 
-  <link rel="canonical" href="{{ property.get_absolute_url }}">
+  <link rel="canonical" href="{% url 'catalog:properties' %}">
   <meta property="og:url" content="https://homy.framer.media/"><!-- Start of headStart -->
 
   <!-- End of headStart -->
@@ -12473,7 +12473,6 @@
       var FAQ_DATA = {{ faq_json|safe }};
       var DOCUMENTS_DATA = {{ documents_json|safe }};
       var PAGE_PROPERTY_TYPE = '{{ active_type|default:"" }}';
-      var AVAT_CUSTOM_MAIN_HTML = {{ custom_main_html_json|safe }};
 
       function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, function (c) {
@@ -12750,62 +12749,15 @@
         initLifestyleChapters();
       }
 
-      function insertCustomMain() {
-        var footer = document.querySelector('.framer-fbxftr-container');
-        if (!footer || !footer.parentNode) return;
-        var parent = footer.parentNode;
-        var mine = document.getElementById('avat-custom-root');
-        Array.prototype.slice.call(parent.children).forEach(function (child) {
-          if (child !== footer && child !== mine) parent.removeChild(child);
-        });
-        if (!document.getElementById('avat-custom-root')) {
-          footer.insertAdjacentHTML('beforebegin', AVAT_CUSTOM_MAIN_HTML);
-        }
-        wireDetailPageExtras();
-      }
-
-      function wireDetailPageExtras() {
-        var thumbs = document.querySelectorAll('.avat-detail-thumb');
-        var mainImg = document.getElementById('avat-detail-main-image');
-        thumbs.forEach(function (btn) {
-          if (btn.dataset.avatWired) return;
-          btn.dataset.avatWired = '1';
-          btn.addEventListener('click', function () {
-            if (mainImg) mainImg.src = btn.getAttribute('data-avat-src');
-            thumbs.forEach(function (b) { b.classList.remove('selected'); });
-            btn.classList.add('selected');
-          });
-        });
-        var leadBtn = document.getElementById('avat-detail-lead-btn');
-        if (leadBtn && !leadBtn.dataset.avatWired) {
-          leadBtn.dataset.avatWired = '1';
-          leadBtn.addEventListener('click', function () {
-            if (window.AvatLeads) window.AvatLeads.open(leadBtn.getAttribute('data-avat-property-type'));
-          });
-        }
-      }
-
-      var avatObserverStarted = false;
-      function observeCustomMain() {
-        if (avatObserverStarted) return;
-        avatObserverStarted = true;
-        var busy = false;
-        var mo = new MutationObserver(function () {
-          if (busy) return;
-          busy = true;
-          insertCustomMain();
-          busy = false;
-        });
-        // Watch the whole body subtree: React's hydration-mismatch recovery can
-        // replace an ancestor above wherever we last found the footer, so a
-        // narrower target can silently stop receiving mutations.
-        mo.observe(document.body, { childList: true, subtree: true });
-      }
-
       function patch() {
-        insertCustomMain();
-        observeCustomMain();
-        if (window.AvatLeads) window.AvatLeads.wireTriggers();
+        injectStyle();
+        fixHeroBadge();
+        fixHeroLinks();
+        insertSeasonsAndLifestyle();
+        insertPropertyCards();
+        wirePlansFilter();
+        insertFaqAccordion();
+        insertDocuments();
       }
 
       if (document.readyState === 'complete') {

@@ -1,0 +1,129 @@
+<main class="avat-detail-main" id="avat-custom-root">
+  <style>
+    .avat-detail-main{padding-top:110px;background:#fff}
+    .avat-detail-hero{display:flex;justify-content:center;padding:0 0 20px}
+    .avat-detail-hero-inner{width:100%;max-width:1180px;padding:0 32px;box-sizing:border-box}
+    .avat-detail-breadcrumb{font-size:13px;color:#637185;margin-bottom:20px}
+    .avat-detail-breadcrumb a{color:#637185;text-decoration:none}
+    .avat-detail-breadcrumb a:hover{color:#19458B}
+    .avat-detail-gallery-main{border-radius:20px;overflow:hidden;background:#F6F6F6;aspect-ratio:16/9}
+    .avat-detail-gallery-main img{width:100%;height:100%;object-fit:cover;display:block}
+    .avat-detail-thumbs{display:flex;gap:10px;margin-top:12px;overflow-x:auto;padding-bottom:4px}
+    .avat-detail-thumb{flex-shrink:0;width:88px;height:66px;border-radius:12px;overflow:hidden;border:2px solid transparent;padding:0;cursor:pointer;background:#F6F6F6}
+    .avat-detail-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .avat-detail-thumb.selected{border-color:#10284E}
+    .avat-detail-body{display:flex;justify-content:center;padding:40px 0 90px}
+    .avat-detail-body-inner{width:100%;max-width:1180px;padding:0 32px;box-sizing:border-box;display:grid;grid-template-columns:1.5fr 1fr;gap:60px;align-items:start}
+    .avat-detail-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid #637185;border-radius:10px;padding:6px 13px;font-size:12px;letter-spacing:.02em;color:#637185;font-weight:500;margin-bottom:18px}
+    .avat-detail-tag i{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+    .avat-detail-main-col h1{font-size:clamp(28px,3.4vw,40px);line-height:1.15;letter-spacing:-.02em;color:#17212E;margin:0 0 10px;font-weight:500}
+    .avat-detail-location{font-size:15px;color:#637185;margin:0 0 28px}
+    .avat-detail-specs-row{display:flex;gap:24px;padding:22px 0;border-top:1px solid #DCE5F0;border-bottom:1px solid #DCE5F0;margin-bottom:32px;flex-wrap:wrap}
+    .avat-detail-specs-row div strong{display:block;font-size:22px;font-weight:500;color:#17212E}
+    .avat-detail-specs-row div span{font-size:13px;color:#637185}
+    .avat-detail-desc h3,.avat-detail-amenities h3,.avat-detail-video h3{font-size:18px;font-weight:600;color:#17212E;margin:0 0 12px}
+    .avat-detail-desc p{font-size:16px;line-height:1.6;color:#637185;margin:0 0 32px;white-space:pre-line}
+    .avat-detail-amenities-list{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+    .avat-detail-amenities-list span{border:1px solid #DCE5F0;padding:9px 16px;font-size:14px;border-radius:20px;color:#17212E}
+    .avat-detail-video video{width:100%;border-radius:16px;display:block;margin-bottom:12px;background:#000}
+    .avat-detail-side{position:sticky;top:110px;background:#F6F6F6;border-radius:20px;padding:28px;box-sizing:border-box}
+    .avat-detail-price{font-size:26px;font-weight:600;color:#17212E;margin-bottom:18px}
+    .avat-detail-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;box-sizing:border-box;background:#10284E;color:#fff;padding:15px;border-radius:12px;font-size:15px;font-weight:500;text-decoration:none;border:0;cursor:pointer;font-family:inherit;margin-bottom:12px}
+    .avat-detail-cta:hover{background:#19458B}
+    .avat-detail-cta-outline{background:#fff;color:#17212E;border:1px solid #DCE5F0}
+    .avat-detail-cta-outline:hover{background:#fff;border-color:#19458B;color:#19458B}
+    .avat-detail-related{display:flex;justify-content:center;padding:0 0 90px}
+    .avat-detail-related-inner{width:100%;max-width:1180px;padding:0 32px;box-sizing:border-box}
+    .avat-detail-related-inner h3{font-size:24px;font-weight:500;color:#17212E;margin:0 0 24px}
+    .avat-detail-related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .avat-detail-related-grid .avat-plan-card{position:relative;display:block;border-radius:18px;overflow:hidden;aspect-ratio:0.9;background:#eee;color:inherit;text-decoration:none}
+    .avat-detail-related-grid .avat-plan-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+    .avat-detail-related-grid .avat-plan-info{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:18px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.72) 66%)}
+    .avat-detail-related-grid .avat-plan-title{display:block;margin:0 0 4px;font-size:12px;color:#f5f5f5;opacity:.85}
+    .avat-detail-related-grid .avat-plan-rooms{margin:0;font-size:16px;font-weight:500;color:#fff;line-height:1.25}
+    @media (max-width:1199px) and (min-width:810px){.avat-detail-body-inner{grid-template-columns:1fr}.avat-detail-side{position:static}}
+    @media (max-width:809px){
+      .avat-detail-main{padding-top:90px}
+      .avat-detail-hero-inner,.avat-detail-body-inner,.avat-detail-related-inner{padding:0 20px}
+      .avat-detail-body-inner{grid-template-columns:1fr;gap:32px}
+      .avat-detail-side{position:static}
+      .avat-detail-related-grid{grid-template-columns:1fr}
+    }
+  </style>
+  <section class="avat-detail-hero">
+    <div class="avat-detail-hero-inner">
+      <nav class="avat-detail-breadcrumb"><a href="{% url 'catalog:properties' %}">Планировки</a> / {{ property.title }}</nav>
+      <div class="avat-detail-gallery-main">
+        {% if property.floor_plan_image %}<img id="avat-detail-main-image" src="{{ property.floor_plan_image.url }}" alt="Планировка {{ property.title }}">{% endif %}
+      </div>
+      {% if property.gallery_images.all %}
+      <div class="avat-detail-thumbs">
+        {% if property.floor_plan_image %}<button type="button" class="avat-detail-thumb selected" data-avat-src="{{ property.floor_plan_image.url }}"><img src="{{ property.floor_plan_image.url }}" alt=""></button>{% endif %}
+        {% for photo in property.gallery_images.all %}
+        <button type="button" class="avat-detail-thumb" data-avat-src="{{ photo.image.url }}"><img src="{{ photo.image.url }}" alt=""></button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+  <section class="avat-detail-body">
+    <div class="avat-detail-body-inner">
+      <div class="avat-detail-main-col">
+        <div class="avat-detail-tag"><i></i>{{ property.get_property_type_display }}</div>
+        <h1>{{ property.title }}</h1>
+        {% if property.location %}<p class="avat-detail-location">{{ property.location }}</p>{% endif %}
+        <div class="avat-detail-specs-row">
+          <div><strong>{{ property.bedrooms }}</strong><span>спален</span></div>
+          <div><strong>{{ property.bathrooms }}</strong><span>санузлов</span></div>
+          <div><strong>{{ property.area_sqm }} м²</strong><span>площадь</span></div>
+        </div>
+        {% if property.description %}
+        <div class="avat-detail-desc">
+          <h3>Описание</h3>
+          <p>{{ property.description }}</p>
+        </div>
+        {% endif %}
+        {% if property.amenities_list %}
+        <div class="avat-detail-amenities">
+          <h3>Удобства</h3>
+          <div class="avat-detail-amenities-list">
+            {% for a in property.amenities_list %}<span>{{ a }}</span>{% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if property.video %}
+        <div class="avat-detail-video">
+          <h3>Видео-обзор</h3>
+          <video controls src="{{ property.video.url }}"></video>
+        </div>
+        {% endif %}
+      </div>
+      <aside class="avat-detail-side">
+        {% if property.price %}<div class="avat-detail-price">{{ property.price }}</div>{% endif %}
+        <a class="avat-detail-cta" target="_blank" rel="noopener"
+          href="https://wa.me/{{ site_settings.whatsapp_number }}?text={{ property.whatsapp_text|urlencode }}">
+          Написать в WhatsApp
+        </a>
+        <button type="button" class="avat-detail-cta avat-detail-cta-outline" id="avat-detail-lead-btn" data-avat-property-type="{{ property.property_type }}">Оставить заявку</button>
+      </aside>
+    </div>
+  </section>
+  {% if related_properties %}
+  <section class="avat-detail-related">
+    <div class="avat-detail-related-inner">
+      <h3>Похожие планировки</h3>
+      <div class="avat-detail-related-grid">
+        {% for p in related_properties %}
+        <a class="avat-plan-card" href="{{ p.get_absolute_url }}">
+          {% if p.floor_plan_image %}<img src="{{ p.floor_plan_image.url }}" alt="Планировка {{ p.title }}" loading="lazy">{% endif %}
+          <span class="avat-plan-info">
+            <span class="avat-plan-title">{{ p.title }}</span>
+            <h5 class="avat-plan-rooms">{{ p.room_line }}</h5>
+          </span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</main>

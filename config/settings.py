@@ -29,6 +29,7 @@ if not ALLOWED_HOSTS:
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -102,6 +103,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 WHITENOISE_ROOT = BASE_DIR / "public"
+# Separate, small static dir (not `public/`) for admin-only assets like the
+# Jazzmin logo/favicon, so collectstatic doesn't copy the whole exported site.
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Admin-uploaded media (floor plans, gallery photos, PDFs).
 # Point DJANGO_MEDIA_ROOT at a mounted persistent volume in production, or
@@ -115,3 +119,91 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # further than Django's own validation for this use case.
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
+
+
+# django-jazzmin: admin theme. Branded for AVAT 365 (navy/blue from the site's
+# own palette) so the admin doesn't look like bare stock Django.
+JAZZMIN_SETTINGS = {
+    "site_title": "AVAT 365 — админка",
+    "site_header": "AVAT 365",
+    "site_brand": "AVAT 365",
+    "site_logo": "img/logo-blue.png",
+    "login_logo": "img/logo-blue.png",
+    "site_icon": "img/favicon.png",
+    "site_logo_classes": "img-square",
+    "welcome_sign": "Панель управления сайтом AVAT 365",
+    "copyright": "AVAT 365",
+    "search_model": ["catalog.Property", "catalog.Document"],
+    "user_avatar": None,
+    "topmenu_links": [
+        {"name": "Смотреть сайт", "url": "/", "new_window": True},
+        {"model": "catalog.Property"},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "catalog",
+        "catalog.Property",
+        "catalog.PropertyImage",
+        "catalog.Document",
+        "catalog.FAQItem",
+        "catalog.SiteSettings",
+        "auth",
+    ],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "catalog.Property": "fas fa-home",
+        "catalog.PropertyImage": "fas fa-images",
+        "catalog.Document": "fas fa-file-pdf",
+        "catalog.FAQItem": "fas fa-circle-question",
+        "catalog.SiteSettings": "fas fa-gear",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "catalog.Property": "collapsible",
+    },
+    "language_chooser": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-dark",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+    "actions_sticky_top": True,
+}

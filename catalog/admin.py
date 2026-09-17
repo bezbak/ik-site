@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import Document, FAQItem, Property, PropertyImage, SiteSettings
+from .models import Document, FAQItem, Lead, Property, PropertyImage, SiteSettings
 
 
 class PropertyImageInline(admin.TabularInline):
@@ -20,15 +20,18 @@ class PropertyImageInline(admin.TabularInline):
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    list_display = ("title", "property_type", "area_sqm", "room_line", "plan_preview", "order", "is_published")
-    list_editable = ("order", "is_published")
+    list_display = (
+        "title", "property_type", "area_sqm", "room_line", "price", "plan_preview", "order", "is_published",
+    )
+    list_editable = ("price", "order", "is_published")
     list_filter = ("property_type", "is_published")
-    search_fields = ("slug", "description")
+    search_fields = ("slug", "description", "location", "amenities")
     prepopulated_fields = {"slug": ()}
     inlines = [PropertyImageInline]
     fieldsets = (
         (None, {"fields": ("property_type", "slug", "area_sqm", "bedrooms", "bathrooms", "room_summary")}),
         ("Планировка и описание", {"fields": ("floor_plan_image", "description")}),
+        ("Витрина (цена, локация, удобства, видео)", {"fields": ("price", "location", "amenities", "video")}),
         ("WhatsApp", {"fields": ("whatsapp_message",)}),
         ("Показ на сайте", {"fields": ("order", "is_published")}),
     )
@@ -55,10 +58,23 @@ class FAQItemAdmin(admin.ModelAdmin):
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
-    list_display = ("phone_number", "whatsapp_number")
+    list_display = ("phone_number", "whatsapp_number", "address")
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Lead)
+class LeadAdmin(admin.ModelAdmin):
+    list_display = ("full_name", "phone", "property_type", "source_page", "created_at", "is_processed")
+    list_editable = ("is_processed",)
+    list_filter = ("property_type", "is_processed", "created_at")
+    search_fields = ("full_name", "phone")
+    readonly_fields = ("full_name", "phone", "property_type", "source_page", "created_at")
+    ordering = ("-created_at",)
+
+    def has_add_permission(self, request):
         return False
