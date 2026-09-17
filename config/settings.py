@@ -5,7 +5,13 @@ Django settings for the AVAT 365 site (config project).
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Loads a .env file from the project root if one exists (no-op otherwise, so
+# this never affects a host that sets real environment variables directly).
+load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Set DJANGO_SECRET_KEY in the environment for real deployments.
