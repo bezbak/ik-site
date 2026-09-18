@@ -12752,15 +12752,17 @@
 
       function insertCustomMain() {
         var footer = document.querySelector('.framer-fbxftr-container');
+        var header = document.querySelector('.framer-eumtsr-container');
         if (!footer || !footer.parentNode) return;
         var parent = footer.parentNode;
         var mine = document.getElementById('avat-custom-root');
         Array.prototype.slice.call(parent.children).forEach(function (child) {
-          if (child !== footer && child !== mine) parent.removeChild(child);
+          if (child !== footer && child !== header && child !== mine) parent.removeChild(child);
         });
         if (!document.getElementById('avat-custom-root')) {
           footer.insertAdjacentHTML('beforebegin', AVAT_CUSTOM_MAIN_HTML);
         }
+        fixNavLinks();
         wireDetailPageExtras();
       }
 
@@ -12802,7 +12804,18 @@
         mo.observe(document.body, { childList: true, subtree: true });
       }
 
+      function fixNavLinks() {
+        var planningUrl = '{% url "catalog:properties" %}';
+        document.querySelectorAll('.framer-eumtsr-container a[data-framer-name="Default"]').forEach(function (el) {
+          var p = el.querySelector('p');
+          if (p && p.textContent.trim() === 'ПЛАНИРОВКИ') {
+            forceLinkEl(el, planningUrl, false, null);
+          }
+        });
+      }
+
       function patch() {
+        injectStyle();
         insertCustomMain();
         observeCustomMain();
         if (window.AvatLeads) window.AvatLeads.wireTriggers();

@@ -12672,9 +12672,48 @@
         initLifestyleChapters();
       }
 
+      // Framer's own runtime intercepts clicks on its native <a> components using
+      // whatever destination was baked in at export time, ignoring later href
+      // mutations. Force our own navigation so the nav link actually goes where
+      // its href now says (and does a real navigation, so Django's trailing-slash
+      // redirect isn't skipped by Framer's client-side routing).
+      function forceLinkEl(el, url, newTab, label) {
+        if (!el) return;
+        el.setAttribute('href', url);
+        if (newTab) { el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener'); }
+        else { el.removeAttribute('target'); }
+        var p = el.querySelector('p, span');
+        if (p && label) p.textContent = label;
+        if (!el.dataset.avatForced) {
+          el.dataset.avatForced = '1';
+          el.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+            var href = el.getAttribute('href');
+            if (el.getAttribute('target') === '_blank') {
+              window.open(href, '_blank', 'noopener');
+            } else {
+              window.location.href = href;
+            }
+          }, true);
+        }
+      }
+
+      function fixNavLinks() {
+        var planningUrl = '{% url "catalog:properties" %}';
+        document.querySelectorAll('.framer-eumtsr-container a[data-framer-name="Default"]').forEach(function (el) {
+          var p = el.querySelector('p');
+          if (p && p.textContent.trim() === 'ПЛАНИРОВКИ') {
+            forceLinkEl(el, planningUrl, false, null);
+          }
+        });
+      }
+
       function patch() {
         injectStyle();
         fixHeroBadge();
+        fixNavLinks();
         insertSeasonsAndLifestyle();
         insertPropertyCards();
         insertFaqAccordion();
