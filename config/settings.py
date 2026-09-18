@@ -32,6 +32,19 @@ if not ALLOWED_HOSTS:
     # Safe fallback so a first deploy doesn't 400 before ALLOWED_HOSTS is configured.
     ALLOWED_HOSTS = ["*"]
 
+# Railway (and most PaaS) terminate TLS at a proxy and forward plain HTTP,
+# setting X-Forwarded-Proto to say so. Without this, request.is_secure() is
+# always False, so Django's CSRF Origin check compares "http://" against the
+# browser's "https://" Origin header and every POST (admin login included)
+# gets rejected with a CSRF 403.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# CSRF_TRUSTED_ORIGINS needs a scheme (ALLOWED_HOSTS doesn't), so derive it
+# from the same host list instead of keeping a second list in sync.
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}" for host in ALLOWED_HOSTS if host not in ("localhost", "127.0.0.1")
+]
+
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",

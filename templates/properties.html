@@ -12473,6 +12473,7 @@
       var FAQ_DATA = {{ faq_json|safe }};
       var DOCUMENTS_DATA = {{ documents_json|safe }};
       var PAGE_PROPERTY_TYPE = '{{ active_type|default:"" }}';
+      var AVAT_CUSTOM_MAIN_HTML = {{ custom_main_html_json|safe }};
 
       function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, function (c) {
@@ -12749,15 +12750,113 @@
         initLifestyleChapters();
       }
 
+      function insertCustomMain() {
+        var footer = document.querySelector('.framer-fbxftr-container');
+        if (!footer || !footer.parentNode) return;
+        var parent = footer.parentNode;
+        var mine = document.getElementById('avat-custom-root');
+        Array.prototype.slice.call(parent.children).forEach(function (child) {
+          if (child !== footer && child !== mine) parent.removeChild(child);
+        });
+        if (!document.getElementById('avat-custom-root')) {
+          footer.insertAdjacentHTML('beforebegin', AVAT_CUSTOM_MAIN_HTML);
+        }
+        wireCatalogFilters();
+      }
+
+      var avatObserverStarted = false;
+      function observeCustomMain() {
+        if (avatObserverStarted) return;
+        avatObserverStarted = true;
+        var busy = false;
+        var mo = new MutationObserver(function () {
+          if (busy) return;
+          busy = true;
+          insertCustomMain();
+          busy = false;
+        });
+        // Watch the whole body subtree: React's hydration-mismatch recovery can
+        // replace an ancestor above wherever we last found the footer, so a
+        // narrower target can silently stop receiving mutations.
+        mo.observe(document.body, { childList: true, subtree: true });
+      }
+
+      function pluralizePlans(n) {
+        var mod10 = n % 10, mod100 = n % 100;
+        if (mod10 === 1 && mod100 !== 11) return n + ' планировка';
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return n + ' планировки';
+        return n + ' планировок';
+      }
+
+      function wireCatalogFilters() {
+        var grid = document.getElementById('avat-catalog-grid');
+        if (!grid) return;
+        var searchInput = document.getElementById('avat-catalog-search-input');
+        var resetBtn = document.getElementById('avat-catalog-reset');
+        var countEl = document.getElementById('avat-catalog-count');
+        var emptyMsg = document.getElementById('avat-catalog-empty-filtered');
+        var groups = document.querySelectorAll('[data-avat-filter-group]');
+        var state = { type: PAGE_PROPERTY_TYPE || 'all', bedrooms: 'all', q: '' };
+
+        function applyFilters() {
+          var visible = 0;
+          grid.querySelectorAll('.avat-plan-card').forEach(function (card) {
+            var matchesType = state.type === 'all' || card.getAttribute('data-avat-type') === state.type;
+            var matchesBedrooms = state.bedrooms === 'all' || card.getAttribute('data-avat-bedrooms') === state.bedrooms;
+            var matchesSearch = !state.q || (card.getAttribute('data-avat-search') || '').indexOf(state.q) !== -1;
+            var show = matchesType && matchesBedrooms && matchesSearch;
+            card.style.display = show ? '' : 'none';
+            if (show) visible++;
+          });
+          if (emptyMsg) emptyMsg.hidden = visible !== 0;
+          if (countEl) countEl.textContent = pluralizePlans(visible);
+        }
+
+        groups.forEach(function (group) {
+          var key = group.getAttribute('data-avat-filter-group');
+          group.querySelectorAll('.avat-catalog-pill').forEach(function (btn) {
+            if (btn.dataset.avatWired) return;
+            btn.dataset.avatWired = '1';
+            btn.addEventListener('click', function () {
+              state[key] = btn.getAttribute('data-avat-filter-value');
+              group.querySelectorAll('.avat-catalog-pill').forEach(function (b) { b.classList.toggle('selected', b === btn); });
+              applyFilters();
+            });
+          });
+        });
+
+        if (searchInput && !searchInput.dataset.avatWired) {
+          searchInput.dataset.avatWired = '1';
+          searchInput.addEventListener('input', function () {
+            state.q = searchInput.value.trim().toLowerCase();
+            applyFilters();
+          });
+        }
+
+        if (resetBtn && !resetBtn.dataset.avatWired) {
+          resetBtn.dataset.avatWired = '1';
+          resetBtn.addEventListener('click', function () {
+            state = { type: 'all', bedrooms: 'all', q: '' };
+            if (searchInput) searchInput.value = '';
+            groups.forEach(function (group) {
+              group.querySelectorAll('.avat-catalog-pill').forEach(function (b) {
+                b.classList.toggle('selected', b.getAttribute('data-avat-filter-value') === 'all');
+              });
+            });
+            applyFilters();
+          });
+        }
+
+        if (!grid.dataset.avatFilterInit) {
+          grid.dataset.avatFilterInit = '1';
+          applyFilters();
+        }
+      }
+
       function patch() {
-        injectStyle();
-        fixHeroBadge();
-        fixHeroLinks();
-        insertSeasonsAndLifestyle();
-        insertPropertyCards();
-        wirePlansFilter();
-        insertFaqAccordion();
-        insertDocuments();
+        insertCustomMain();
+        observeCustomMain();
+        if (window.AvatLeads) window.AvatLeads.wireTriggers();
       }
 
       if (document.readyState === 'complete') {

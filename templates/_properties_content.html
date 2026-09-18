@@ -1,0 +1,104 @@
+<main class="avat-catalog-main" id="avat-custom-root">
+  <style>
+    .avat-catalog-section{padding:140px 0 100px;display:flex;justify-content:center;background:#fff}
+    .avat-catalog-inner{width:100%;max-width:1320px;padding:0 32px;box-sizing:border-box}
+    .avat-catalog-head{margin-bottom:40px;max-width:640px}
+    .avat-catalog-head h1{font-size:clamp(32px,4vw,48px);line-height:1.1;letter-spacing:-.02em;color:#17212E;margin:18px 0 14px;font-weight:500}
+    .avat-catalog-head p{font-size:16px;line-height:1.55;color:#637185;margin:0}
+    .avat-catalog-layout{display:grid;grid-template-columns:270px 1fr;gap:40px;align-items:start}
+    .avat-catalog-sidebar{background:#F6F6F6;border-radius:20px;padding:26px;box-sizing:border-box;position:sticky;top:110px}
+    .avat-catalog-filter-group{margin-bottom:26px}
+    .avat-catalog-filter-group:last-of-type{margin-bottom:20px}
+    .avat-catalog-filter-group h4{margin:0 0 14px;font-size:12px;font-weight:600;color:#17212E;text-transform:uppercase;letter-spacing:.04em}
+    .avat-catalog-search input{width:100%;padding:12px 14px;border:1px solid #DCE5F0;border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box;background:#fff;color:#17212E}
+    .avat-catalog-search input::placeholder{color:#9AA6B5}
+    .avat-catalog-pills{display:flex;flex-wrap:wrap;gap:8px}
+    .avat-catalog-pill{border:1px solid #DCE5F0;background:#fff;color:#17212E;padding:9px 16px;border-radius:99px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
+    .avat-catalog-pill:hover{border-color:#19458B}
+    .avat-catalog-pill.selected{background:#10284E;border-color:#10284E;color:#fff}
+    .avat-catalog-reset{width:100%;background:transparent;border:1px solid #DCE5F0;color:#637185;padding:10px;border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer}
+    .avat-catalog-reset:hover{border-color:#19458B;color:#19458B}
+    .avat-catalog-count{font-size:14px;color:#637185;margin:0 0 20px}
+    .avat-catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+    .avat-catalog-grid .avat-plan-card{aspect-ratio:0.85}
+    .avat-plan-price{display:block;font-size:19px;font-weight:600;color:#fff;margin:0 0 4px}
+    .avat-catalog-type-badge{position:absolute;top:16px;left:16px;z-index:1;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#17212E;font-size:12px;font-weight:500;padding:8px 13px;border-radius:99px;box-shadow:0 6px 16px rgba(0,0,0,.1)}
+    .avat-catalog-type-badge svg{width:13px;height:13px;flex-shrink:0}
+    .avat-catalog-empty{grid-column:1/-1;padding:60px 20px;text-align:center;color:#637185;font-size:15px;background:#F6F6F6;border-radius:16px}
+    @media (max-width:1023px){.avat-catalog-layout{grid-template-columns:1fr}.avat-catalog-sidebar{position:static}}
+    @media (max-width:809px){
+      .avat-catalog-section{padding:110px 0 60px}
+      .avat-catalog-inner{padding:0 20px}
+      .avat-catalog-grid{grid-template-columns:1fr}
+      .avat-catalog-grid .avat-plan-card{aspect-ratio:1.3}
+    }
+  </style>
+  <section class="avat-catalog-section">
+    <div class="avat-catalog-inner">
+      <div class="avat-catalog-head">
+        <div class="avat-plans-tag"><i></i>ПЛАНИРОВКИ</div>
+        <h1>Каталог планировок</h1>
+        <p>Сравните апартаменты и коттеджи AVAT 365 на Иссык-Куле — площадь, количество спален и цену — и выберите свой формат.</p>
+      </div>
+      <div class="avat-catalog-layout">
+        <aside class="avat-catalog-sidebar">
+          <div class="avat-catalog-filter-group avat-catalog-search">
+            <h4>Поиск</h4>
+            <input type="text" id="avat-catalog-search-input" placeholder="Например «коттедж»">
+          </div>
+          <div class="avat-catalog-filter-group">
+            <h4>Тип недвижимости</h4>
+            <div class="avat-catalog-pills" data-avat-filter-group="type">
+              <button type="button" class="avat-catalog-pill{% if not active_type %} selected{% endif %}" data-avat-filter-value="all">Все</button>
+              <button type="button" class="avat-catalog-pill{% if active_type == 'apartment' %} selected{% endif %}" data-avat-filter-value="apartment">Апартаменты</button>
+              <button type="button" class="avat-catalog-pill{% if active_type == 'cottage' %} selected{% endif %}" data-avat-filter-value="cottage">Коттеджи</button>
+            </div>
+          </div>
+          {% if bedroom_options %}
+          <div class="avat-catalog-filter-group">
+            <h4>Спален</h4>
+            <div class="avat-catalog-pills" data-avat-filter-group="bedrooms">
+              <button type="button" class="avat-catalog-pill selected" data-avat-filter-value="all">Все</button>
+              {% for n in bedroom_options %}
+              <button type="button" class="avat-catalog-pill" data-avat-filter-value="{{ n }}">{{ n }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          <button type="button" class="avat-catalog-reset" id="avat-catalog-reset">Сбросить фильтры</button>
+        </aside>
+        <div>
+          <p class="avat-catalog-count" id="avat-catalog-count" aria-live="polite"></p>
+          <div class="avat-catalog-grid" id="avat-catalog-grid">
+            {% for p in properties %}
+            <a class="avat-plan-card" href="{{ p.get_absolute_url }}"
+              data-avat-type="{{ p.property_type }}" data-avat-bedrooms="{{ p.bedrooms }}"
+              data-avat-search="{{ p.title|lower }} {{ p.room_line|lower }} {{ p.location|lower }}">
+              {% if p.floor_plan_image %}<img src="{{ p.floor_plan_image.url }}" alt="Планировка {{ p.title }}" loading="lazy">{% endif %}
+              <span class="avat-catalog-type-badge">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M3 11.5 12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {{ p.get_property_type_display }}
+              </span>
+              <span class="avat-plan-info">
+                {% if p.price %}<span class="avat-plan-price">{{ p.price }}</span>{% endif %}
+                <span class="avat-plan-title">{{ p.title }}</span>
+                <h5 class="avat-plan-rooms">{{ p.room_line }}</h5>
+                <span class="avat-plan-specs">
+                  <span><svg viewBox="0 0 24 24" fill="none"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>{{ p.bedrooms }}</span>
+                  <span class="avat-plan-divider"></span>
+                  <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM4 12V6a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 19v2M15 19v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>{{ p.bathrooms }}</span>
+                  <span class="avat-plan-divider"></span>
+                  <span><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h5v5M21 3h-5v5M3 21h5v-5M21 21h-5v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>{{ p.area_sqm }} м²</span>
+                </span>
+              </span>
+            </a>
+            {% empty %}
+            <p class="avat-catalog-empty">Планировки скоро появятся здесь.</p>
+            {% endfor %}
+          </div>
+          <p class="avat-catalog-empty" id="avat-catalog-empty-filtered" hidden>Ничего не найдено. Попробуйте изменить фильтры.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

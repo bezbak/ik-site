@@ -82,24 +82,35 @@ def home(request):
 
 
 def properties(request):
-    """Unified catalog page: all published properties (apartments + cottages),
-    with an optional `?type=` query param used to pre-select the client-side filter tab.
+    """Dedicated catalog page: all published properties (apartments + cottages),
+    with an optional `?type=` query param used to pre-select the filter tab.
+
+    Unlike home, this page's content isn't part of the shared one-page design
+    (no hero/about/infrastructure/etc.), so it reuses the property_detail/contact_us
+    technique: render a standalone fragment and let the page's patch() loop swap
+    it in for the whole body, instead of relying on the shared plans section.
     """
     active_type = request.GET.get("type", "")
     if active_type not in (Property.APARTMENT, Property.COTTAGE):
         active_type = ""
 
     properties_qs = Property.objects.filter(is_published=True)
-    faq_items = FAQItem.objects.filter(is_published=True)
-    documents = Document.objects.filter(is_published=True)
-    context = {
-        "active_type": active_type,
+    bedroom_options = sorted(set(properties_qs.values_list("bedrooms", flat=True)))
+    content_context = {
         "properties": properties_qs,
-        "documents": documents,
-        "faq_items": faq_items,
-        **_common_context(properties_qs, faq_items, documents),
+        "active_type": active_type,
+        "bedroom_options": bedroom_options,
     }
-    return render(request, "properties.html", context)
+    # The page reuses the shared footer/head-scripts block, which references
+    # PROPERTIES_DATA/FAQ_DATA/DOCUMENTS_DATA as inline JS — keep those defined
+    # (even if empty) so that script block doesn't fail to parse.
+    return render(request, "properties.html", {
+        "active_type": active_type,
+        "custom_main_html_json": _custom_main_html_json(
+            request, "_properties_content.html", content_context,
+        ),
+        "properties_json": "[]", "faq_json": "[]", "documents_json": "[]",
+    })
 
 
 def properties_redirect(request, property_type):
