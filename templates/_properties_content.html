@@ -19,8 +19,9 @@
     .avat-catalog-reset{width:100%;background:transparent;border:1px solid #DCE5F0;color:#637185;padding:10px;border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer}
     .avat-catalog-reset:hover{border-color:#19458B;color:#19458B}
     .avat-catalog-count{font-size:14px;color:#637185;margin:0 0 20px}
-    .avat-catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-    .avat-catalog-grid .avat-plan-card{aspect-ratio:0.85}
+    .avat-catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,420px));gap:20px}
+    .avat-catalog-grid .avat-plan-card{display:block;width:100%;position:relative;aspect-ratio:0.85;border-radius:18px;overflow:hidden;background:#eee;color:inherit;text-decoration:none}
+    .avat-catalog-grid .avat-plan-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
     .avat-plan-price{display:block;font-size:19px;font-weight:600;color:#fff;margin:0 0 4px}
     .avat-catalog-type-badge{position:absolute;top:16px;left:16px;z-index:1;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#17212E;font-size:12px;font-weight:500;padding:8px 13px;border-radius:99px;box-shadow:0 6px 16px rgba(0,0,0,.1)}
     .avat-catalog-type-badge svg{width:13px;height:13px;flex-shrink:0}
