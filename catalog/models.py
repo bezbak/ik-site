@@ -18,6 +18,16 @@ class SiteSettings(models.Model):
         max_length=200, blank=True, default="Токтогула 147, кабинет 40",
         verbose_name="Адрес офиса",
     )
+    apartments_hero_image = models.ImageField(
+        upload_to="site/", blank=True, null=True,
+        verbose_name="Фон первого экрана — Апартаменты",
+        help_text="Показывается на странице /apartments/ вместо общего фона. Широкое изображение, как баннер.",
+    )
+    cottages_hero_image = models.ImageField(
+        upload_to="site/", blank=True, null=True,
+        verbose_name="Фон первого экрана — Коттеджи",
+        help_text="Показывается на странице /cottages/ вместо общего фона. Широкое изображение, как баннер.",
+    )
 
     class Meta:
         verbose_name = "Контакты сайта"

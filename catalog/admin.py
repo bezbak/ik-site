@@ -59,6 +59,31 @@ class FAQItemAdmin(admin.ModelAdmin):
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ("phone_number", "whatsapp_number", "address")
+    fieldsets = (
+        ("Контакты", {"fields": ("phone_number", "whatsapp_number", "address")}),
+        ("Страница «Апартаменты» (/apartments/)", {
+            "fields": ("apartments_hero_image", "apartments_hero_preview"),
+        }),
+        ("Страница «Коттеджи» (/cottages/)", {
+            "fields": ("cottages_hero_image", "cottages_hero_preview"),
+        }),
+    )
+    readonly_fields = ("apartments_hero_preview", "cottages_hero_preview")
+
+    def _preview(self, image):
+        if image:
+            return format_html('<img src="{}" style="max-height:160px;border-radius:8px">', image.url)
+        return "—"
+
+    def apartments_hero_preview(self, obj):
+        return self._preview(obj.apartments_hero_image)
+
+    apartments_hero_preview.short_description = "Превью"
+
+    def cottages_hero_preview(self, obj):
+        return self._preview(obj.cottages_hero_image)
+
+    cottages_hero_preview.short_description = "Превью"
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()

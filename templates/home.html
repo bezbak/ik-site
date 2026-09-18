@@ -4,12 +4,13 @@
 <html lang="en" data-redirect-timezone="1" dir="ltr">
 
 <head>
+  <base href="/">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <meta name="generator" content="Framer d22cd96">
-  <title>AVAT 365 — курортный комплекс на Иссык-Куле</title>
+  <title>{{ page_title|default:'AVAT 365 — курортный комплекс на Иссык-Куле' }}</title>
   <meta name="description"
-    content="AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.">
+    content="{{ page_description|default:'AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.' }}">
   <meta name="framer-search-index"
     content="assets/framerusercontent.com/sites/4M3N8CQazo8JSONb63tMrT/searchIndex-3UTFMV4Jg4QZ.json">
   <meta name="framer-search-index-fallback"
@@ -18,20 +19,20 @@
   <link rel="apple-touch-icon" href="/img/favicon.png">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="AVAT 365 — курортный комплекс на Иссык-Куле">
+  <meta property="og:title" content="{{ page_title|default:'AVAT 365 — курортный комплекс на Иссык-Куле' }}">
   <meta property="og:description"
-    content="AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.">
+    content="{{ page_description|default:'AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.' }}">
   <meta property="og:image" content="/img/logo-blue.png">
   <!-- X -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AVAT 365 — курортный комплекс на Иссык-Куле">
+  <meta name="twitter:title" content="{{ page_title|default:'AVAT 365 — курортный комплекс на Иссык-Куле' }}">
   <meta name="twitter:description"
-    content="AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.">
+    content="{{ page_description|default:'AVAT 365 — апартаменты и коттеджи на Иссык-Куле в Чон-Сары-Ое. Спорт, SPA и пространства для восстановления в одном курортном комплексе.' }}">
   <meta name="twitter:image" content="/img/logo-blue.png">
 
 
-  <link rel="canonical" href="/">
-  <meta property="og:url" content="https://avatconstruction.com/"><!-- Start of headStart -->
+  <link rel="canonical" href="{{ canonical_path|default:'/' }}">
+  <meta property="og:url" content="{{ og_url|default:'https://avatconstruction.com/' }}"><!-- Start of headStart -->
 
   <!-- End of headStart -->
 
@@ -8145,7 +8146,7 @@
                     </a><!--/$--></div><!--/$--><!--$-->
                   <div class="framer-1nvivf1-container"><!--$--><a
                       class="framer-gp9YK framer-kGt8W framer-12c6yr framer-v-12c6yr framer-17fd8si"
-                      data-framer-name="Default" data-highlight="true" href="about-us.html" tabindex="0">
+                      data-framer-name="Default" data-highlight="true" href="{% url 'catalog:about_us' %}" tabindex="0">
                       <div class="framer-tem2c0" data-framer-name="Process Label"
                         data-framer-component-type="RichTextContainer"
                         style="--extracted-r6o4lv:var(--token-bef40d4c-c8ef-4925-b8ff-fc7817829d8b, rgb(23, 33, 46));--framer-link-text-color:rgb(25, 69, 139);--framer-link-text-decoration:underline;transform:none">
@@ -10419,11 +10420,25 @@
                 <h3>Найдите пространство под свой сценарий</h3>
               </div>
               <div>
+                {% if property_type == 'cottage' %}
+                <p>Сравните планировки и выберите коттедж для вашего дома на Иссык-Куле.</p>
+                <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:apartments' %}#planning">
+                  Смотреть апартаменты
+                  <span class="avat-plans-btn-arrow">→</span>
+                </a>
+                {% elif property_type == 'apartment' %}
+                <p>Сравните планировки и выберите апартаменты для вашего дома на Иссык-Куле.</p>
+                <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:cottages' %}#planning">
+                  Смотреть коттеджи
+                  <span class="avat-plans-btn-arrow">→</span>
+                </a>
+                {% else %}
                 <p>Сравните планировки апартаментов и коттеджей и выберите подходящий формат для вашего дома на Иссык-Куле.</p>
                 <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:properties' %}">
                   Смотреть все планировки
                   <span class="avat-plans-btn-arrow">→</span>
                 </a>
+                {% endif %}
               </div>
             </div>
             <div class="avat-plans-grid">
@@ -11027,8 +11042,8 @@
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="2469"
                         height="1347"
                         sizes="(min-width: 1200px) min(100vw - 32px, 1920px), (max-width: 809.98px) calc(min(100vw - 32px, 1920px) * 1.2), (min-width: 810px) and (max-width: 1199.98px) min(100vw - 32px, 1920px)"
-                        srcset="img/gallery-4.jpg 512w,img/gallery-4.jpg 1024w,img/gallery-4.jpg 2048w,img/gallery-4.jpg 2469w"
-                        src="img/gallery-4.jpg" alt="Modern, glass-walled house at night, reflecting on a wet driveway."
+                        srcset="img/footer-bg.png 512w,img/footer-bg.png 1024w,img/footer-bg.png 2048w,img/footer-bg.png 2469w"
+                        src="img/footer-bg.png" alt="Осенний парк на закате — территория AVAT 365"
                         style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
                     </div>
                   </div>
@@ -11039,9 +11054,9 @@
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="1344"
                         height="768"
                         sizes="(min-width: 1200px) min(100vw - 32px, 1920px), (max-width: 809.98px) min(100vw - 32px, 1920px), (min-width: 810px) and (max-width: 1199.98px) min(100vw - 32px, 1920px)"
-                        srcset="img/gallery-4.jpg 512w,img/gallery-4.jpg 1024w,img/gallery-4.jpg 1344w"
-                        src="img/gallery-4.jpg"
-                        alt="Modern, glass-walled house at night, reflecting on a wet driveway."
+                        srcset="img/footer-building.png 512w,img/footer-building.png 1024w,img/footer-building.png 1344w"
+                        src="img/footer-building.png"
+                        alt="Коттедж AVAT 365 из кирпича"
                         style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
                     </div>
                   </div>
@@ -11152,7 +11167,7 @@
                           <div class="framer-5ox2we-container" data-framer-name="Navigation Item 1"
                             name="Navigation Item 1"><!--$--><a name="Navigation Item 1"
                               class="framer-gp9YK framer-kGt8W framer-12c6yr framer-v-1jbvoeu framer-17fd8si"
-                              data-framer-name="White" data-highlight="true" href="about-us.html" tabindex="0">
+                              data-framer-name="White" data-highlight="true" href="{% url 'catalog:about_us' %}" tabindex="0">
                               <div class="framer-tem2c0" data-framer-name="Process Label"
                                 data-framer-component-type="RichTextContainer"
                                 style="--extracted-r6o4lv:var(--token-76f192a4-8d39-41b6-882d-b7bbc7cdb219, rgb(245, 245, 245));--framer-link-text-color:rgb(25, 69, 139);--framer-link-text-decoration:underline;transform:none">
@@ -11511,8 +11526,8 @@
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="2469"
                         height="1347"
                         sizes="(min-width: 1200px) min(100vw - 32px, 1920px), (max-width: 809.98px) calc(min(100vw - 32px, 1920px) * 1.2), (min-width: 810px) and (max-width: 1199.98px) min(100vw - 32px, 1920px)"
-                        srcset="img/gallery-4.jpg 512w,img/gallery-4.jpg 1024w,img/gallery-4.jpg 2048w,img/gallery-4.jpg 2469w"
-                        src="img/gallery-4.jpg" alt="Modern, glass-walled house at night, reflecting on a wet driveway."
+                        srcset="img/footer-bg.png 512w,img/footer-bg.png 1024w,img/footer-bg.png 2048w,img/footer-bg.png 2469w"
+                        src="img/footer-bg.png" alt="Осенний парк на закате — территория AVAT 365"
                         style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
                     </div>
                   </div>
@@ -11523,9 +11538,9 @@
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="1344"
                         height="768"
                         sizes="(min-width: 1200px) min(100vw - 32px, 1920px), (max-width: 809.98px) min(100vw - 32px, 1920px), (min-width: 810px) and (max-width: 1199.98px) min(100vw - 32px, 1920px)"
-                        srcset="img/gallery-4.jpg 512w,img/gallery-4.jpg 1024w,img/gallery-4.jpg 1344w"
-                        src="img/gallery-4.jpg"
-                        alt="Modern, glass-walled house at night, reflecting on a wet driveway."
+                        srcset="img/footer-building.png 512w,img/footer-building.png 1024w,img/footer-building.png 1344w"
+                        src="img/footer-building.png"
+                        alt="Коттедж AVAT 365 из кирпича"
                         style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
                     </div>
                   </div>
@@ -11636,7 +11651,7 @@
                           <div class="framer-5ox2we-container" data-framer-name="Navigation Item 1"
                             name="Navigation Item 1"><!--$--><a name="Navigation Item 1"
                               class="framer-gp9YK framer-kGt8W framer-12c6yr framer-v-1jbvoeu framer-17fd8si"
-                              data-framer-name="White" data-highlight="true" href="about-us.html" tabindex="0">
+                              data-framer-name="White" data-highlight="true" href="{% url 'catalog:about_us' %}" tabindex="0">
                               <div class="framer-tem2c0" data-framer-name="Process Label"
                                 data-framer-component-type="RichTextContainer"
                                 style="--extracted-r6o4lv:var(--token-76f192a4-8d39-41b6-882d-b7bbc7cdb219, rgb(245, 245, 245));--framer-link-text-color:rgb(25, 69, 139);--framer-link-text-decoration:underline;transform:none">
@@ -11994,8 +12009,8 @@
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="2469"
                         height="1347"
                         sizes="(min-width: 1200px) min(100vw - 32px, 1920px), (max-width: 809.98px) calc(min(100vw - 32px, 1920px) * 1.2), (min-width: 810px) and (max-width: 1199.98px) min(100vw - 32px, 1920px)"
-                        srcset="img/gallery-4.jpg 512w,img/gallery-4.jpg 1024w,img/gallery-4.jpg 2048w,img/gallery-4.jpg 2469w"
-                        src="img/gallery-4.jpg" alt="Modern, glass-walled house at night, reflecting on a wet driveway."
+                        srcset="img/footer-bg.png 512w,img/footer-bg.png 1024w,img/footer-bg.png 2048w,img/footer-bg.png 2469w"
+                        src="img/footer-bg.png" alt="Осенний парк на закате — территория AVAT 365"
                         style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
                     </div>
                   </div>
@@ -12006,9 +12021,9 @@
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="1344"
                         height="768"
                         sizes="(min-width: 1200px) min(100vw - 32px, 1920px), (max-width: 809.98px) min(100vw - 32px, 1920px), (min-width: 810px) and (max-width: 1199.98px) min(100vw - 32px, 1920px)"
-                        srcset="img/gallery-4.jpg 512w,img/gallery-4.jpg 1024w,img/gallery-4.jpg 1344w"
-                        src="img/gallery-4.jpg"
-                        alt="Modern, glass-walled house at night, reflecting on a wet driveway."
+                        srcset="img/footer-building.png 512w,img/footer-building.png 1024w,img/footer-building.png 1344w"
+                        src="img/footer-building.png"
+                        alt="Коттедж AVAT 365 из кирпича"
                         style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
                     </div>
                   </div>
@@ -12119,7 +12134,7 @@
                           <div class="framer-5ox2we-container" data-framer-name="Navigation Item 1"
                             name="Navigation Item 1"><!--$--><a name="Navigation Item 1"
                               class="framer-gp9YK framer-kGt8W framer-12c6yr framer-v-1jbvoeu framer-17fd8si"
-                              data-framer-name="White" data-highlight="true" href="about-us.html" tabindex="0">
+                              data-framer-name="White" data-highlight="true" href="{% url 'catalog:about_us' %}" tabindex="0">
                               <div class="framer-tem2c0" data-framer-name="Process Label"
                                 data-framer-component-type="RichTextContainer"
                                 style="--extracted-r6o4lv:var(--token-76f192a4-8d39-41b6-882d-b7bbc7cdb219, rgb(245, 245, 245));--framer-link-text-color:rgb(25, 69, 139);--framer-link-text-decoration:underline;transform:none">
@@ -12468,6 +12483,52 @@
       var DOCUMENTS_DATA = {{ documents_json|safe }};
       var PAGE_PROPERTY_TYPE = '{{ property_type|default:"" }}';
       var CROSS_LINK_URL = {% if property_type == 'cottage' %}'{% url "catalog:apartments" %}#planning'{% elif property_type == 'apartment' %}'{% url "catalog:cottages" %}#planning'{% else %}'tel:+996222170399'{% endif %};
+      var TYPE_HERO_BG_IMAGE = '{{ hero_bg_image|default:"" }}';
+
+      // On /apartments/ and /cottages/ this same home page is reused with only
+      // the hero copy and the "planning" grid (via PROPERTIES_DATA above)
+      // swapped for the relevant type — everything else stays identical to
+      // the main site. Text is patched via JS (not server-side template
+      // conditionals) because Framer's hydration can revert server-rendered
+      // text back to whatever's baked into its compiled bundle.
+      var TYPE_HERO_COPY = {
+        apartment: {
+          tag: 'АПАРТАМЕНТЫ',
+          title: 'Апартаменты AVAT 365',
+          description: 'Своё пространство для поездок на Иссык-Куль. Отдельные спальни и кухни-гостиные в разных планировочных решениях.'
+        },
+        cottage: {
+          tag: 'КОТТЕДЖИ',
+          title: 'Коттеджи AVAT 365',
+          description: 'Больше пространства для семьи. Одноэтажные дома трёх типов: 78, 110 и 145 м² по проекту.'
+        }
+      };
+
+      function applyTypeHero() {
+        var copy = TYPE_HERO_COPY[PAGE_PROPERTY_TYPE];
+        if (!copy) return;
+        var hero = document.getElementById('hero');
+        if (!hero) return;
+        var tagP = hero.querySelector('[data-framer-name="Total User Default"] p');
+        if (tagP && tagP.textContent.trim() !== copy.tag) tagP.textContent = copy.tag;
+        var h1 = hero.querySelector('h1');
+        if (h1 && h1.textContent.trim() !== copy.title) h1.textContent = copy.title;
+        var descP = hero.querySelector('[data-framer-name="Description Text"] p');
+        if (descP && descP.textContent.trim() !== copy.description) descP.textContent = copy.description;
+
+        // Admin-uploaded hero photo (SiteSettings.apartments/cottages_hero_image) —
+        // inserted as the first child so it sits behind the existing smoke
+        // effect and the text, same stacking order the smoke layers rely on.
+        if (TYPE_HERO_BG_IMAGE && !hero.querySelector('#avat-hero-bg-image')) {
+          var bg = document.createElement('div');
+          bg.id = 'avat-hero-bg-image';
+          bg.style.cssText = 'position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;';
+          bg.innerHTML =
+            '<img src="' + TYPE_HERO_BG_IMAGE + '" alt="' + copy.title + '" style="width:100%;height:100%;object-fit:cover;display:block">' +
+            '<div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,.8) 100%)"></div>';
+          hero.insertBefore(bg, hero.firstChild);
+        }
+      }
 
       function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, function (c) {
@@ -12700,12 +12761,80 @@
         }
       }
 
+      // Framer's exported nav only ships О ПРОЕКТЕ/ПЛАНИРОВКИ/ИНФРАСТРУКТУРА —
+      // clone the "ПЛАНИРОВКИ" nav item to add real Apartments/Cottages links
+      // (fixNavLinks below then wires their hrefs via the labelMap).
+      function insertTypeNavLinks() {
+        document.querySelectorAll('.framer-eumtsr-container [data-framer-name="Links"]').forEach(function (linksContainer) {
+          if (linksContainer.dataset.avatTypeLinksAdded) return;
+          var planningWrapper = null;
+          Array.prototype.forEach.call(linksContainer.children, function (wrapper) {
+            var p = wrapper.querySelector('a[data-framer-name="Default"] p');
+            if (p && p.textContent.trim() === 'ПЛАНИРОВКИ') planningWrapper = wrapper;
+          });
+          if (!planningWrapper) return;
+          linksContainer.dataset.avatTypeLinksAdded = '1';
+          var after = planningWrapper;
+          [
+            { label: 'АПАРТАМЕНТЫ', url: '{% url "catalog:apartments" %}' },
+            { label: 'КОТТЕДЖИ', url: '{% url "catalog:cottages" %}' }
+          ].forEach(function (item) {
+            var clone = planningWrapper.cloneNode(true);
+            var a = clone.querySelector('a');
+            var p = clone.querySelector('p');
+            delete a.dataset.avatForced;
+            a.setAttribute('href', item.url);
+            p.textContent = item.label;
+            after.parentNode.insertBefore(clone, after.nextSibling);
+            after = clone;
+          });
+        });
+      }
+
       function fixNavLinks() {
-        var planningUrl = '{% url "catalog:properties" %}';
-        document.querySelectorAll('.framer-eumtsr-container a[data-framer-name="Default"]').forEach(function (el) {
+        insertTypeNavLinks();
+        var homeUrl = '{% url "catalog:home" %}';
+        var labelMap = {
+          'ПЛАНИРОВКИ': '{% url "catalog:properties" %}',
+          'АПАРТАМЕНТЫ': '{% url "catalog:apartments" %}',
+          'КОТТЕДЖИ': '{% url "catalog:cottages" %}',
+          'ИНФРАСТРУКТУРА': homeUrl + '#services',
+          'О ПРОЕКТЕ': '{% url "catalog:about_us" %}',
+          'ЛОКАЦИЯ': homeUrl
+        };
+        // Header uses "Default" for text nav items, footer uses "White" — both
+        // point at the same set of destinations, just styled differently.
+        document.querySelectorAll('.framer-eumtsr-container a[data-framer-name="Default"], .framer-fbxftr-container a[data-framer-name="White"]').forEach(function (el) {
           var p = el.querySelector('p');
-          if (p && p.textContent.trim() === 'ПЛАНИРОВКИ') {
-            forceLinkEl(el, planningUrl, false, null);
+          var label = p && p.textContent.trim().toUpperCase();
+          if (label && labelMap[label]) forceLinkEl(el, labelMap[label], false, null);
+        });
+        // Header + footer CTA buttons ("Подобрать апартаменты" / "Получить подборку").
+        document.querySelectorAll('.framer-eumtsr-container a[data-framer-name="Main/Black"], .framer-fbxftr-container a[data-framer-name="Main/Black"]').forEach(function (el) {
+          forceLinkEl(el, '{% url "catalog:contact_us" %}', false, null);
+        });
+        // Header + footer logo.
+        document.querySelectorAll('.framer-eumtsr-container a[data-framer-name="Black Logo"], .framer-fbxftr-container a[data-framer-name="White Logo"]').forEach(function (el) {
+          forceLinkEl(el, homeUrl, false, null);
+        });
+      }
+
+      // Same hydration problem as the nav links above: Framer's runtime keeps
+      // resetting these two <img> tags back to the export-time photo, so the
+      // new footer background/building images have to be forced in JS too.
+      function forceFooterImages() {
+        document.querySelectorAll('.framer-fbxftr-container [data-framer-name="Main Image"] img').forEach(function (img) {
+          if (img.getAttribute('src') !== '/img/footer-bg.png') {
+            img.setAttribute('src', '/img/footer-bg.png');
+            img.setAttribute('srcset', '/img/footer-bg.png');
+            img.setAttribute('alt', 'Осенний парк на закате — территория AVAT 365');
+          }
+        });
+        document.querySelectorAll('.framer-fbxftr-container [data-framer-name="Cloud Image"] img').forEach(function (img) {
+          if (img.getAttribute('src') !== '/img/footer-building.png') {
+            img.setAttribute('src', '/img/footer-building.png');
+            img.setAttribute('srcset', '/img/footer-building.png');
+            img.setAttribute('alt', 'Коттедж AVAT 365 из кирпича');
           }
         });
       }
@@ -12714,17 +12843,40 @@
         injectStyle();
         fixHeroBadge();
         fixNavLinks();
+        forceFooterImages();
+        applyTypeHero();
         insertSeasonsAndLifestyle();
         insertPropertyCards();
         insertFaqAccordion();
         insertDocuments();
       }
 
+      var avatNavObserverStarted = false;
+      function observeNavLinks() {
+        if (avatNavObserverStarted) return;
+        avatNavObserverStarted = true;
+        var busy = false;
+        var mo = new MutationObserver(function () {
+          if (busy) return;
+          busy = true;
+          // Scroll-triggered entrance animations can re-mount header/footer
+          // links well after patch()'s fixed retries stop firing — re-force
+          // them on every mutation too, not just on a timer.
+          fixNavLinks();
+          forceFooterImages();
+          applyTypeHero();
+          busy = false;
+        });
+        mo.observe(document.body, { childList: true, subtree: true });
+      }
+
       if (document.readyState === 'complete') {
         patch(); setTimeout(patch, 300); setTimeout(patch, 1200); setTimeout(patch, 2500);
+        observeNavLinks();
       } else {
         window.addEventListener('load', function () {
           patch(); setTimeout(patch, 300); setTimeout(patch, 1200); setTimeout(patch, 2500);
+          observeNavLinks();
         });
       }
     })();

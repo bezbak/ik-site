@@ -2,13 +2,12 @@ import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from .models import Document, FAQItem, Lead, Property
+from .models import Document, FAQItem, Lead, Property, SiteSettings
 
 
 def _serialize_properties(qs):
@@ -113,10 +112,66 @@ def properties(request):
     })
 
 
-def properties_redirect(request, property_type):
-    """Old /cottages/ and /apartments/ URLs now point at the unified catalog page."""
-    url = reverse("catalog:properties")
-    return redirect(f"{url}?type={property_type}", permanent=True)
+# SEO copy per type for the dedicated /apartments/ and /cottages/ landing
+# pages — each is a full copy of the home page (not a filtered view of
+# /properties/) so ad campaigns can target and report on them separately.
+# The hero headline/description swap itself is done client-side in home.html
+# (see TYPE_HERO_COPY there) since Framer's hydration can revert server-side
+# text changes back to whatever's baked into its compiled bundle.
+_TYPE_LANDING_SEO = {
+    Property.APARTMENT: {
+        "page_title": "Апартаменты AVAT 365 — планировки и цены",
+        "page_description": "Апартаменты AVAT 365 на Иссык-Куле: отдельные спальни и кухни-гостиные в разных планировочных решениях. Площади, цены и фото планировок.",
+        "canonical_path": "/apartments/",
+        "og_url": "https://avatconstruction.com/apartments/",
+    },
+    Property.COTTAGE: {
+        "page_title": "Коттеджи AVAT 365 — планировки и цены",
+        "page_description": "Коттеджи AVAT 365 на Иссык-Куле: одноэтажные дома трёх типов площадью 78, 110 и 145 м². Планировки, цены и фото.",
+        "canonical_path": "/cottages/",
+        "og_url": "https://avatconstruction.com/cottages/",
+    },
+}
+
+
+def _type_landing_page(request, property_type):
+    """Dedicated /apartments/ or /cottages/ page: the exact same one-page
+    home layout (hero, about, infrastructure, services, location, FAQ,
+    footer...), with only the hero copy and the "Планировки" plans grid
+    locked to one property type, so each page can run as its own,
+    separately trackable ad landing page.
+    """
+    seo = _TYPE_LANDING_SEO[property_type]
+    properties_qs = Property.objects.filter(is_published=True, property_type=property_type)
+    faq_items = FAQItem.objects.filter(is_published=True)
+    documents = Document.objects.filter(is_published=True)
+    site_settings = SiteSettings.load()
+    hero_image = (
+        site_settings.apartments_hero_image
+        if property_type == Property.APARTMENT
+        else site_settings.cottages_hero_image
+    )
+    context = {
+        "properties": properties_qs,
+        "documents": documents,
+        "faq_items": faq_items,
+        "property_type": property_type,
+        "page_title": seo["page_title"],
+        "page_description": seo["page_description"],
+        "canonical_path": seo["canonical_path"],
+        "og_url": seo["og_url"],
+        "hero_bg_image": hero_image.url if hero_image else "",
+        **_common_context(properties_qs, faq_items, documents),
+    }
+    return render(request, "home.html", context)
+
+
+def apartments(request):
+    return _type_landing_page(request, Property.APARTMENT)
+
+
+def cottages(request):
+    return _type_landing_page(request, Property.COTTAGE)
 
 
 def property_detail(request, slug):
@@ -149,6 +204,10 @@ def contact_us(request):
         "custom_main_html_json": _custom_main_html_json(request, "_contact_us_content.html", {}),
         "properties_json": "[]", "faq_json": "[]", "documents_json": "[]",
     })
+
+
+def about_us(request):
+    return render(request, "about_us.html")
 
 
 @csrf_exempt
