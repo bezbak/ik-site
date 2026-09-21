@@ -10378,7 +10378,7 @@
           </div>
         </section>
         <style>
-          .avat-plans-section{background:#fff;padding:80px 0;display:flex;justify-content:center;position:relative;z-index:1}
+          .avat-plans-section{background:#fff;padding:80px 0;display:flex;justify-content:center;position:relative;z-index:1; width:100%}
           .avat-plans-inner{width:100%;max-width:1320px;padding:0 32px;box-sizing:border-box}
           .avat-plans-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;margin-bottom:48px}
           .avat-plans-head h3{font-size:clamp(28px,3.4vw,40px);line-height:1.15;letter-spacing:-.02em;color:#17212E;margin:0;font-weight:500;max-width:560px}
@@ -11039,7 +11039,7 @@
                     </div>
                   </div>
                   <div class="framer-8n7bap" data-framer-name="Cloud Image"
-                    style="mask:linear-gradient(0deg, rgba(0,0,0,0) 11%, rgba(0, 0, 0, 0) 34%, rgb(0, 0, 0) 57.00000000000001%) add;-webkit-mask:linear-gradient(0deg, rgba(0,0,0,0) 11%, rgba(0, 0, 0, 0) 34%, rgb(0, 0, 0) 57.00000000000001%) add">
+                    style="mask:linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) 18%, rgb(0, 0, 0) 30%) add;-webkit-mask:linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) 18%, rgb(0, 0, 0) 30%) add">
                     <div
                       style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0"
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="1344"
@@ -11523,7 +11523,7 @@
                     </div>
                   </div>
                   <div class="framer-8n7bap" data-framer-name="Cloud Image"
-                    style="mask:linear-gradient(0deg, rgba(0,0,0,0) 11%, rgba(0, 0, 0, 0) 19%, rgb(0, 0, 0) 57.00000000000001%) add;-webkit-mask:linear-gradient(0deg, rgba(0,0,0,0) 11%, rgba(0, 0, 0, 0) 19%, rgb(0, 0, 0) 57.00000000000001%) add">
+                    style="mask:linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) 10%, rgb(0, 0, 0) 30%) add;-webkit-mask:linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) 10%, rgb(0, 0, 0) 30%) add">
                     <div
                       style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0"
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="1344"
@@ -12006,7 +12006,7 @@
                     </div>
                   </div>
                   <div class="framer-8n7bap" data-framer-name="Cloud Image"
-                    style="mask:linear-gradient(0deg, rgba(0,0,0,0) 11%, rgba(0, 0, 0, 0) 28.000000000000004%, rgb(0, 0, 0) 57.00000000000001%) add;-webkit-mask:linear-gradient(0deg, rgba(0,0,0,0) 11%, rgba(0, 0, 0, 0) 28.000000000000004%, rgb(0, 0, 0) 57.00000000000001%) add">
+                    style="mask:linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) 15%, rgb(0, 0, 0) 30%) add;-webkit-mask:linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) 15%, rgb(0, 0, 0) 30%) add">
                     <div
                       style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0"
                       data-framer-background-image-wrapper="true"><img decoding="async" loading="lazy" width="1344"
@@ -12879,12 +12879,31 @@
             img.setAttribute('alt', 'Осенний парк на закате — территория AVAT 365');
           }
         });
-        document.querySelectorAll('.framer-fbxftr-container [data-framer-name="Cloud Image"] img').forEach(function (img) {
-          if (img.getAttribute('src') !== '/img/footer-building.png') {
+        document.querySelectorAll('.framer-fbxftr-container [data-framer-name="Cloud Image"]').forEach(function (wrap) {
+          var img = wrap.querySelector('img');
+          if (img && img.getAttribute('src') !== '/img/footer-building.png') {
             img.setAttribute('src', '/img/footer-building.png');
             img.setAttribute('srcset', '/img/footer-building.png');
             img.setAttribute('alt', 'Коттедж AVAT 365 из кирпича');
           }
+          // Same hydration problem again — Framer keeps resetting this mask
+          // back to its wider export-time value, so re-shrink the fade-to-navy
+          // zone at the bottom of the photo on every patch tick too.
+          var m = wrap.style.mask.match(/rgba\(0,0,0,0\) 11%, rgba\(0, 0, 0, 0\) ([\d.]+)%, rgb\(0, 0, 0\) 57/);
+          if (m) {
+            var mid = Math.round(parseFloat(m[1]) * (15 / 28));
+            var css = 'linear-gradient(0deg, rgba(0,0,0,0) 6%, rgba(0, 0, 0, 0) ' + mid + '%, rgb(0, 0, 0) 30%) add';
+            wrap.style.mask = css;
+            wrap.style.webkitMask = css;
+          }
+        });
+        // The CTA banner's tag/description text use a gray tone meant for
+        // light backgrounds — illegible on this dark footer. Force a light
+        // color, scoped to the CTA Wrapper only so nothing elsewhere (e.g.
+        // the same "Section Tag"/"Description Text" names used on white
+        // backgrounds) gets touched.
+        document.querySelectorAll('.framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Section Tag"] p, .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Description Text"] p').forEach(function (p) {
+          p.style.color = '#F5F5F5';
         });
       }
 
@@ -12895,11 +12914,32 @@
         if (window.AvatLeads) window.AvatLeads.wireTriggers();
       }
 
+      // The Cloud/Main Image mask & src get reset by a style-attribute
+      // mutation, not a childList one — childList-only observers above never
+      // see it. Watch the (always-present, never-removed) footer directly.
+      var avatFooterObserverStarted = false;
+      function observeFooterImages() {
+        if (avatFooterObserverStarted) return;
+        var footer = document.querySelector('.framer-fbxftr-container');
+        if (!footer) return;
+        avatFooterObserverStarted = true;
+        var busy = false;
+        var mo = new MutationObserver(function () {
+          if (busy) return;
+          busy = true;
+          forceFooterImages();
+          busy = false;
+        });
+        mo.observe(footer, { attributes: true, attributeFilter: ['style', 'src', 'srcset'], subtree: true });
+      }
+
       if (document.readyState === 'complete') {
         patch(); setTimeout(patch, 300); setTimeout(patch, 1200); setTimeout(patch, 2500);
+        observeFooterImages();
       } else {
         window.addEventListener('load', function () {
           patch(); setTimeout(patch, 300); setTimeout(patch, 1200); setTimeout(patch, 2500);
+          observeFooterImages();
         });
       }
     })();
