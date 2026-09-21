@@ -204,6 +204,27 @@
     
     <!-- End of headEnd -->
 	
+<style id="avat-footer-style">
+  /* Footer: plain navy background — no photos, no big logo — and a compact height. */
+  .framer-fbxftr-container [data-framer-name="Main Image"],
+  .framer-fbxftr-container [data-framer-name="Cloud Image"],
+  .framer-fbxftr-container [data-framer-name="Logo Container"]{display:none !important}
+  .framer-fbxftr-container [data-framer-name="Footer"]{background-color:#10284E !important}
+  .framer-fbxftr-container [data-framer-name="Content Area"]{padding-bottom:64px !important}
+  /* Text/button were tuned for the light sky photo — re-colour for plain navy. */
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"]{width:min(760px,100%) !important;max-width:none !important}
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Headline Text"],
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Description Text"]{width:100% !important}
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Headline Text"] *{color:#fff !important}
+  /* Framer leaves the last word of a paragraph breakable mid-word (white-space:unset). */
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Headline Text"] p > span,
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Headline Text"] h3 > span,
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] [data-framer-name="Description Text"] p > span{white-space:nowrap !important}
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] a[data-framer-name="Main/Black"]{background-color:#fff !important}
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] a[data-framer-name="Main/Black"] p{color:#10284E !important}
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] a[data-framer-name="Main/Black"] [data-framer-name="Arrow"]{background-color:#10284E !important}
+  .framer-fbxftr-container [data-framer-name="CTA Wrapper"] a[data-framer-name="Main/Black"] [data-framer-name="Arrow"] svg{--21h8s6:#fff !important}
+</style>
 </head>
 <body>
 	<script async src="assets/events.framer.com/script" data-fid="e135468ebbda108c920ad2301cee115365570e3e6560e9ddbf6775900968d7b8" data-no-nt></script>
