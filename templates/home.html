@@ -8076,7 +8076,6 @@
   .framer-fbxftr-container [data-framer-name="Main Image"],
   .framer-fbxftr-container [data-framer-name="Cloud Image"],
   .framer-fbxftr-container [data-framer-name="Logo Container"]{display:none !important}
-  .framer-fbxftr-container [data-framer-name="Footer"]{background-color:#10284E !important}
   .framer-fbxftr-container [data-framer-name="Content Area"]{padding-bottom:64px !important}
   /* Text/button were tuned for the light sky photo — re-colour for plain navy. */
   .framer-fbxftr-container [data-framer-name="CTA Wrapper"]{width:min(760px,100%) !important;max-width:none !important}
@@ -10443,14 +10442,14 @@
               <div>
                 {% if property_type == 'cottage' %}
                 <p>Сравните планировки и выберите коттедж для вашего дома на Иссык-Куле.</p>
-                <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:apartments' %}#planning">
-                  Смотреть апартаменты
+                <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:properties' %}?type=cottage">
+                  Смотреть коттеджи
                   <span class="avat-plans-btn-arrow">→</span>
                 </a>
                 {% elif property_type == 'apartment' %}
                 <p>Сравните планировки и выберите апартаменты для вашего дома на Иссык-Куле.</p>
-                <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:cottages' %}#planning">
-                  Смотреть коттеджи
+                <a class="avat-plans-btn" id="avat-cross-link" href="{% url 'catalog:properties' %}?type=apartment">
+                  Смотреть апартаменты
                   <span class="avat-plans-btn-arrow">→</span>
                 </a>
                 {% else %}
@@ -12503,7 +12502,7 @@
       var FAQ_DATA = {{ faq_json|safe }};
       var DOCUMENTS_DATA = {{ documents_json|safe }};
       var PAGE_PROPERTY_TYPE = '{{ property_type|default:"" }}';
-      var CROSS_LINK_URL = {% if property_type == 'cottage' %}'{% url "catalog:apartments" %}#planning'{% elif property_type == 'apartment' %}'{% url "catalog:cottages" %}#planning'{% else %}'tel:+996222170399'{% endif %};
+      var CROSS_LINK_URL = {% if property_type == 'cottage' %}'{% url "catalog:properties" %}?type=cottage'{% elif property_type == 'apartment' %}'{% url "catalog:properties" %}?type=apartment'{% else %}'{% url "catalog:properties" %}'{% endif %};
       var TYPE_HERO_BG_IMAGE = '{{ hero_bg_image|default:"" }}';
 
       // On /apartments/ and /cottages/ this same home page is reused with only
@@ -12576,7 +12575,7 @@
           ? PROPERTIES_DATA.map(propertyCardHtml).join('')
           : '<p class="avat-plan-empty">Планировки скоро появятся здесь.</p>';
         var descNoun = PAGE_PROPERTY_TYPE === 'cottage' ? 'коттедж' : PAGE_PROPERTY_TYPE === 'apartment' ? 'апартаменты' : 'апартаменты или коттедж';
-        var crossLabel = PAGE_PROPERTY_TYPE === 'cottage' ? 'Смотреть апартаменты' : PAGE_PROPERTY_TYPE === 'apartment' ? 'Смотреть коттеджи' : 'Смотреть все';
+        var crossLabel = PAGE_PROPERTY_TYPE === 'cottage' ? 'Смотреть коттеджи' : PAGE_PROPERTY_TYPE === 'apartment' ? 'Смотреть апартаменты' : 'Смотреть все';
         return '<section class="avat-plans-section" id="planning"><div class="avat-plans-inner">' +
           '<div class="avat-plans-head"><div><div class="avat-plans-tag"><i></i>ПЛАНИРОВКИ</div><h3>Найдите пространство под свой сценарий</h3></div>' +
           '<div><p>Сравните планировки и выберите ' + descNoun + ' для вашего дома на Иссык-Куле.</p>' +
