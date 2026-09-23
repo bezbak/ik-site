@@ -3975,6 +3975,10 @@
         padding: 0 24px
       }
 
+      .framer-UUgyX .framer-1vge7ew {
+        transform: translateY(-80px) !important
+      }
+
       .framer-UUgyX .framer-xvu0td,
       .framer-UUgyX .framer-17s7b0,
       .framer-UUgyX .framer-b9ucs6,
@@ -4116,7 +4120,8 @@
       .framer-UUgyX .framer-1vge7ew {
         aspect-ratio: 1.26623;
         height: var(--framer-aspect-ratio-supported, 158px);
-        width: 120%
+        width: 120%;
+        transform: none !important
       }
 
       .framer-UUgyX .framer-xvu0td,
@@ -4183,7 +4188,9 @@
       .framer-UUgyX .framer-176jw6v,
       .framer-UUgyX .framer-4o0pqw,
       .framer-UUgyX .framer-co997 {
-        padding: 20px
+        padding: 20px;
+        flex-wrap: wrap;
+        row-gap: 6px
       }
 
       .framer-UUgyX .framer-z0fuxn {
@@ -8420,7 +8427,7 @@
           </div>
           <div class="ssr-variant hidden-1f3ehr3 hidden-72rtr7">
             <div class="framer-1vge7ew" data-framer-name="Home Image"
-              style="will-change:transform;opacity:1;transform:translateY(-180px)">
+              style="will-change:transform;opacity:1;transform:none">
               <div style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0"
                 data-framer-background-image-wrapper="true"><img decoding="async" width="1774" height="887"
                   sizes="(min-width: 1200px) min(100vw, 1920px), (min-width: 810px) and (max-width: 1199.98px) min(100vw, 1920px), (max-width: 809.98px) calc(min(100vw, 1920px) * 1.2)"
@@ -12812,7 +12819,41 @@
         });
       }
 
+      // The mobile/tablet menu overlay mounts one "Links" list per responsive
+      // breakpoint variant (like the ssr-variant blocks elsewhere on the
+      // page), but the CSS that hides all but the active variant is only
+      // emitted for markup present in the static export — this overlay is
+      // client-rendered only, so that CSS never made it into the page and
+      // every variant stacks up visibly, duplicating menu items. Keep
+      // whichever sibling copy has the most links (the real, complete menu)
+      // under each parent and hide the rest.
+      function dedupeMenuLinks() {
+        var groups = [];
+        document.querySelectorAll('.framer-eumtsr-container [data-framer-name="Links"]').forEach(function (el) {
+          var parent = el.parentElement;
+          if (!parent) return;
+          var group = null;
+          for (var i = 0; i < groups.length; i++) {
+            if (groups[i].parent === parent) { group = groups[i]; break; }
+          }
+          if (!group) { group = { parent: parent, items: [] }; groups.push(group); }
+          group.items.push(el);
+        });
+        groups.forEach(function (group) {
+          if (group.items.length < 2) return;
+          var best = group.items[0];
+          group.items.forEach(function (el) {
+            if (el.children.length > best.children.length) best = el;
+          });
+          group.items.forEach(function (el) {
+            if (el === best) el.style.removeProperty('display');
+            else el.style.setProperty('display', 'none', 'important');
+          });
+        });
+      }
+
       function fixNavLinks() {
+        dedupeMenuLinks();
         insertTypeNavLinks();
         var homeUrl = '{% url "catalog:home" %}';
         var labelMap = {
