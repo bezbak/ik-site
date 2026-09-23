@@ -56,6 +56,42 @@ class FAQItemAdmin(admin.ModelAdmin):
     list_editable = ("order", "is_published")
 
 
+# Every photo/video slot on the About Us page, in the order they appear on
+# the page (numbered in their verbose_name too, so the admin list and the
+# page match up without needing to guess which is which).
+_ABOUT_US_IMAGE_FIELDS = (
+    "about_us_photo", "about_us_experience_photo", "about_us_trust_photo",
+    "about_us_ticker_photo_1", "about_us_ticker_photo_2", "about_us_ticker_photo_3",
+    "about_us_ticker_photo_4", "about_us_ticker_photo_5",
+)
+_ABOUT_US_VIDEO_FIELDS = ("about_us_video", "about_us_mission_video")
+
+
+def _make_image_preview(field_name):
+    def preview(self, obj):
+        image = getattr(obj, field_name)
+        if image:
+            return format_html('<img src="{}" style="max-height:160px;border-radius:8px">', image.url)
+        return "—"
+
+    preview.short_description = "Превью"
+    return preview
+
+
+def _make_video_preview(field_name):
+    def preview(self, obj):
+        video = getattr(obj, field_name)
+        if video:
+            return format_html(
+                '<video src="{}" muted loop autoplay playsinline style="max-height:160px;border-radius:8px"></video>',
+                video.url,
+            )
+        return "—"
+
+    preview.short_description = "Превью"
+    return preview
+
+
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ("phone_number", "whatsapp_number", "address")
@@ -67,16 +103,26 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ("Страница «Коттеджи» (/cottages/)", {
             "fields": ("cottages_hero_image", "cottages_hero_preview"),
         }),
-        ("Страница «О компании» (/about-us.html) — видео слева", {
-            "fields": ("about_us_video", "about_us_video_preview"),
-        }),
-        ("Страница «О компании» (/about-us.html) — фото справа", {
-            "fields": ("about_us_photo", "about_us_photo_preview"),
+        ("Страница «О компании» (/about-us.html) — все фото и видео", {
+            "description": "Каждое поле подписано номером и местом на странице, в порядке сверху вниз.",
+            "fields": (
+                "about_us_video", "about_us_video_preview",
+                "about_us_photo", "about_us_photo_preview",
+                "about_us_mission_video", "about_us_mission_video_preview",
+                "about_us_experience_photo", "about_us_experience_photo_preview",
+                "about_us_trust_photo", "about_us_trust_photo_preview",
+                "about_us_ticker_photo_1", "about_us_ticker_photo_1_preview",
+                "about_us_ticker_photo_2", "about_us_ticker_photo_2_preview",
+                "about_us_ticker_photo_3", "about_us_ticker_photo_3_preview",
+                "about_us_ticker_photo_4", "about_us_ticker_photo_4_preview",
+                "about_us_ticker_photo_5", "about_us_ticker_photo_5_preview",
+            ),
         }),
     )
     readonly_fields = (
         "apartments_hero_preview", "cottages_hero_preview",
-        "about_us_video_preview", "about_us_photo_preview",
+        *(f"{name}_preview" for name in _ABOUT_US_IMAGE_FIELDS),
+        *(f"{name}_preview" for name in _ABOUT_US_VIDEO_FIELDS),
     )
 
     def _preview(self, image):
@@ -94,26 +140,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     cottages_hero_preview.short_description = "Превью"
 
-    def about_us_photo_preview(self, obj):
-        return self._preview(obj.about_us_photo)
-
-    about_us_photo_preview.short_description = "Превью"
-
-    def about_us_video_preview(self, obj):
-        if obj.about_us_video:
-            return format_html(
-                '<video src="{}" muted loop autoplay playsinline style="max-height:160px;border-radius:8px"></video>',
-                obj.about_us_video.url,
-            )
-        return "—"
-
-    about_us_video_preview.short_description = "Превью"
-
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+for _field_name in _ABOUT_US_IMAGE_FIELDS:
+    setattr(SiteSettingsAdmin, f"{_field_name}_preview", _make_image_preview(_field_name))
+for _field_name in _ABOUT_US_VIDEO_FIELDS:
+    setattr(SiteSettingsAdmin, f"{_field_name}_preview", _make_video_preview(_field_name))
 
 
 @admin.register(Lead)

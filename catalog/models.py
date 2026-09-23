@@ -30,13 +30,49 @@ class SiteSettings(models.Model):
     )
     about_us_video = models.FileField(
         upload_to="site/about-us/", blank=True, null=True,
-        verbose_name="О компании — видео (левый блок)",
-        help_text="Страница «О компании». Видео без звука, зацикленное, слева от фото. Формат MP4.",
+        verbose_name="1. Видео в самом верху (слева)",
+        help_text="Страница «О компании», блок «AVAT Construction строит уже 15 лет». Видео без звука, зацикленное. Формат MP4.",
     )
     about_us_photo = models.ImageField(
         upload_to="site/about-us/", blank=True, null=True,
-        verbose_name="О компании — фото (правый блок)",
-        help_text="Страница «О компании». Фото справа от видео.",
+        verbose_name="2. Фото в самом верху (справа)",
+        help_text="Страница «О компании», тот же блок вверху страницы, фото рядом с видео.",
+    )
+    about_us_mission_video = models.FileField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="3. Видео в блоке «Наша миссия / Наше видение»",
+        help_text="Страница «О компании». Видео без звука, зацикленное, на фоне текста миссии и видения.",
+    )
+    about_us_experience_photo = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="4. Фото в карточке «Познакомьтесь с AVAT 365»",
+        help_text="Страница «О компании», блок «Опыт, который можно увидеть» — большая тёмная карточка с кнопкой «Получить презентацию».",
+    )
+    about_us_trust_photo = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="5. Фото в карточке с портретом (справа в блоке «Опыт»)",
+        help_text="Страница «О компании», блок «Опыт, который можно увидеть» — карточка с портретом человека и текстом на английском.",
+    )
+    about_us_ticker_photo_1 = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="6. Лента «Нам доверяют» — фото 1 из 5",
+        help_text="Страница «О компании», блок «Опыт, который можно увидеть» — узкая карточка со скроллящимися фото справа внизу.",
+    )
+    about_us_ticker_photo_2 = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="7. Лента «Нам доверяют» — фото 2 из 5",
+    )
+    about_us_ticker_photo_3 = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="8. Лента «Нам доверяют» — фото 3 из 5",
+    )
+    about_us_ticker_photo_4 = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="9. Лента «Нам доверяют» — фото 4 из 5",
+    )
+    about_us_ticker_photo_5 = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="10. Лента «Нам доверяют» — фото 5 из 5",
     )
 
     class Meta:

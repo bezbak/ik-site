@@ -381,8 +381,22 @@
           });
         }
 
-        var AVAT_ABOUT_VIDEO_URL = '{{ about_us_video_url|escapejs }}';
-        var AVAT_ABOUT_PHOTO_URL = '{{ about_us_photo_url|escapejs }}';
+        // Every photo/video slot on this page that can be swapped from the
+        // admin (SiteSettings), matched by the hash in the ORIGINAL asset's
+        // filename baked into Framer's export -- there's no other reliable way
+        // to tell these apart (several share the same component classes).
+        var AVAT_ABOUT_MEDIA = [
+          { match: 'rI2dEovMPm3NHSgDR5vB8RrdGs', url: '{{ about_us_video_url|escapejs }}', tag: 'video' },
+          { match: '4HL0fzFRq5ePZ1mpJXpZ4a4y5Y', url: '{{ about_us_photo_url|escapejs }}', tag: 'img' },
+          { match: 'Bg3JpCFVhXQn97VzoZ1IHBgQMBg', url: '{{ about_us_mission_video_url|escapejs }}', tag: 'video' },
+          { match: 'g2f5kGpjo90woC6PDiMZlxyN0w', url: '{{ about_us_experience_photo_url|escapejs }}', tag: 'img' },
+          { match: 'fIyAjnZ2gAZdn550oqGHb6GoSzA', url: '{{ about_us_trust_photo_url|escapejs }}', tag: 'img' },
+          { match: '5Vxo16bNUTl6ZclqgomJdW5Q', url: '{{ about_us_ticker_photo_1_url|escapejs }}', tag: 'img' },
+          { match: 'dJ7fWLlvgxhbTwk9okaVDZFG7JA', url: '{{ about_us_ticker_photo_2_url|escapejs }}', tag: 'img' },
+          { match: 'fzQ2xS2V9QmSJmALiGNMih6TWYU', url: '{{ about_us_ticker_photo_3_url|escapejs }}', tag: 'img' },
+          { match: 'KJ8VlLuAo5JRrMqlrZ6SuEFJIQ', url: '{{ about_us_ticker_photo_4_url|escapejs }}', tag: 'img' },
+          { match: 'kgO0bckgo4wHvesBw5PMbiFiD2I', url: '{{ about_us_ticker_photo_5_url|escapejs }}', tag: 'img' }
+        ];
         function insertVideoMarquee() {
           var container = document.querySelector('[data-framer-name="Video Player"]');
           if (!container || container.dataset.avatMarqueeAdded) return;
@@ -413,22 +427,15 @@
         }
 
         function applyAboutUsMedia() {
-          if (AVAT_ABOUT_VIDEO_URL) {
-            document.querySelectorAll('[data-framer-name="Video Player"] video').forEach(function (v) {
-              if (v.getAttribute('src') !== AVAT_ABOUT_VIDEO_URL) {
-                v.setAttribute('src', AVAT_ABOUT_VIDEO_URL);
-                v.load();
-              }
+          AVAT_ABOUT_MEDIA.forEach(function (item) {
+            if (!item.url) return;
+            document.querySelectorAll(item.tag + '[src*="' + item.match + '"]').forEach(function (el) {
+              if (el.getAttribute('src') === item.url) return;
+              el.setAttribute('src', item.url);
+              if (item.tag === 'img') el.setAttribute('srcset', item.url);
+              else el.load();
             });
-          }
-          if (AVAT_ABOUT_PHOTO_URL) {
-            document.querySelectorAll('[data-framer-name="Home Image"] img').forEach(function (img) {
-              if (img.getAttribute('src') !== AVAT_ABOUT_PHOTO_URL) {
-                img.setAttribute('src', AVAT_ABOUT_PHOTO_URL);
-                img.setAttribute('srcset', AVAT_ABOUT_PHOTO_URL);
-              }
-            });
-          }
+          });
         }
 
         function patch() { fixNavLinks(); forceFooterImages(); applyAboutUsMedia(); insertVideoMarquee(); }

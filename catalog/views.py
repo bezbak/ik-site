@@ -208,9 +208,15 @@ def contact_us(request):
 
 def about_us(request):
     site_settings = SiteSettings.load()
+    media_fields = [
+        "about_us_video", "about_us_photo", "about_us_mission_video",
+        "about_us_experience_photo", "about_us_trust_photo",
+        "about_us_ticker_photo_1", "about_us_ticker_photo_2", "about_us_ticker_photo_3",
+        "about_us_ticker_photo_4", "about_us_ticker_photo_5",
+    ]
     context = {
-        "about_us_video_url": site_settings.about_us_video.url if site_settings.about_us_video else "",
-        "about_us_photo_url": site_settings.about_us_photo.url if site_settings.about_us_photo else "",
+        f"{name}_url": (getattr(site_settings, name).url if getattr(site_settings, name) else "")
+        for name in media_fields
     }
     return render(request, "about_us.html", context)
 
