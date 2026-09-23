@@ -28,6 +28,16 @@ class SiteSettings(models.Model):
         verbose_name="Фон первого экрана — Коттеджи",
         help_text="Показывается на странице /cottages/ вместо общего фона. Широкое изображение, как баннер.",
     )
+    about_us_video = models.FileField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="О компании — видео (левый блок)",
+        help_text="Страница «О компании». Видео без звука, зацикленное, слева от фото. Формат MP4.",
+    )
+    about_us_photo = models.ImageField(
+        upload_to="site/about-us/", blank=True, null=True,
+        verbose_name="О компании — фото (правый блок)",
+        help_text="Страница «О компании». Фото справа от видео.",
+    )
 
     class Meta:
         verbose_name = "Контакты сайта"

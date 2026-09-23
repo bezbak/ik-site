@@ -207,7 +207,12 @@ def contact_us(request):
 
 
 def about_us(request):
-    return render(request, "about_us.html")
+    site_settings = SiteSettings.load()
+    context = {
+        "about_us_video_url": site_settings.about_us_video.url if site_settings.about_us_video else "",
+        "about_us_photo_url": site_settings.about_us_photo.url if site_settings.about_us_photo else "",
+    }
+    return render(request, "about_us.html", context)
 
 
 @csrf_exempt

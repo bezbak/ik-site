@@ -67,8 +67,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ("Страница «Коттеджи» (/cottages/)", {
             "fields": ("cottages_hero_image", "cottages_hero_preview"),
         }),
+        ("Страница «О компании» (/about-us.html) — видео слева", {
+            "fields": ("about_us_video", "about_us_video_preview"),
+        }),
+        ("Страница «О компании» (/about-us.html) — фото справа", {
+            "fields": ("about_us_photo", "about_us_photo_preview"),
+        }),
     )
-    readonly_fields = ("apartments_hero_preview", "cottages_hero_preview")
+    readonly_fields = (
+        "apartments_hero_preview", "cottages_hero_preview",
+        "about_us_video_preview", "about_us_photo_preview",
+    )
 
     def _preview(self, image):
         if image:
@@ -84,6 +93,21 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         return self._preview(obj.cottages_hero_image)
 
     cottages_hero_preview.short_description = "Превью"
+
+    def about_us_photo_preview(self, obj):
+        return self._preview(obj.about_us_photo)
+
+    about_us_photo_preview.short_description = "Превью"
+
+    def about_us_video_preview(self, obj):
+        if obj.about_us_video:
+            return format_html(
+                '<video src="{}" muted loop autoplay playsinline style="max-height:160px;border-radius:8px"></video>',
+                obj.about_us_video.url,
+            )
+        return "—"
+
+    about_us_video_preview.short_description = "Превью"
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
