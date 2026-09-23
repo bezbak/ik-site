@@ -3095,7 +3095,10 @@
       width: 100%;
       height: auto;
       position: relative;
-      pointer-events: none
+      pointer-events: none;
+      --avat-hero-y: -150px;
+      transform: translateY(var(--avat-hero-y)) !important;
+      will-change: transform
     }
 
     .framer-UUgyX .framer-xvu0td,
@@ -3975,6 +3978,10 @@
         padding: 0 24px
       }
 
+      .framer-UUgyX .framer-1vge7ew {
+        --avat-hero-y: -60px
+      }
+
       .framer-UUgyX .framer-xvu0td,
       .framer-UUgyX .framer-17s7b0,
       .framer-UUgyX .framer-b9ucs6,
@@ -4116,7 +4123,8 @@
       .framer-UUgyX .framer-1vge7ew {
         aspect-ratio: 1.26623;
         height: var(--framer-aspect-ratio-supported, 158px);
-        width: 120%
+        width: 120%;
+        --avat-hero-y: 0px
       }
 
       .framer-UUgyX .framer-xvu0td,
@@ -8100,6 +8108,25 @@
      distinguishes it from the Wellness/Medical cards, which share the same
      component classes, so target it by src rather than by class. */
   img[src$="service-sport.jpg"]{display:none !important}
+</style>
+<style id="avat-service-cards-mobile-style">
+  /* Phones: the Wellness/Medical card photos were letterboxed inside a
+     fixed-aspect box (object-fit:contain), leaving navy strips down the
+     sides. Make the photo a full-bleed background of the whole card instead,
+     with a navy fade on top so the white heading stays readable. */
+  @media (max-width:809.98px){
+    .framer-wlPYL .framer-1osqcn6{
+      top:0 !important;right:0 !important;bottom:0 !important;left:0 !important;
+      width:100% !important;max-width:none !important;height:100% !important;
+      aspect-ratio:auto !important;transform:none !important;
+      -webkit-mask:none !important;mask:none !important
+    }
+    .framer-wlPYL .framer-1osqcn6 img{object-fit:cover !important;object-position:center !important}
+    .framer-wlPYL .framer-1osqcn6::after{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(180deg,rgba(16,40,78,.8) 0%,rgba(16,40,78,.45) 45%,rgba(16,40,78,.2) 100%)
+    }
+  }
 </style>
 <style id="avat-cottage-hero-style">
   /* Cottage landing hero photo: unlike the apartment cutout (transparent
@@ -12955,57 +12982,38 @@
         });
       }
 
-      // Framer's own scroll-linked transform on the hero photo moves it the
-      // same number of pixels per pixel scrolled at every breakpoint. We
-      // want it to also start higher/above the cloud line at rest (a
-      // constant offset) and, on a phone's short viewport, to rise more
-      // gently (a fraction of Framer's raw delta) so it doesn't cross into
-      // the button row within one swipe. We used to just override the
-      // transform with a fixed !important value, but that freezes Framer's
-      // live updates entirely — this instead reads whatever Framer just
-      // wrote and adjusts it in place on every update, so the live rise is
-      // preserved.
-      //
-      // A wrapper div for the constant offset (so we wouldn't have to touch
-      // Framer's own element at all) doesn't survive: this page's React tree
-      // throws a hydration mismatch and silently rebuilds itself on load
-      // (true on the live site too, not something we introduced), and that
-      // rebuild strips any extra element we'd inserted. Adjusting the
-      // existing element's style attribute in place survives that rebuild
-      // fine — only added/removed nodes get reconciled away. But the
-      // rebuild does replace this element itself at least once, so we can't
-      // just attach one observer up front either; patch() already retries on
-      // a timer for the same reason fixNavLinks()/forceFooterImages() do,
-      // and we piggyback on that, (re)attaching to any not-yet-marked
-      // element each time.
-      var avatHeroLiftLastWritten = new WeakMap();
-      function initHeroLift() {
-        function handle(el) {
-          var w = window.innerWidth;
-          var scale, offset;
-          if (w < 810) { scale = 0.35; offset = 0; }
-          else if (w < 1200) { scale = 1; offset = -60; }
-          else { scale = 1; offset = -150; }
-          var raw = el.style.transform;
-          if (!raw || raw === avatHeroLiftLastWritten.get(el)) return;
-          var rawY = 0;
-          if (raw !== 'none') {
-            var m = /translateY\((-?[\d.]+)px\)/.exec(raw);
-            if (!m) return;
-            rawY = parseFloat(m[1]);
-          }
-          var next = 'translateY(' + (rawY * scale + offset) + 'px)';
-          avatHeroLiftLastWritten.set(el, next);
-          el.style.transform = next;
-        }
+      // Hero building photo parallax. We used to intercept Framer's own
+      // scroll-linked transform on this element and rewrite it in place, but
+      // two writers on one property is a losing game: Chrome serialises the
+      // inline transform to ~6 significant digits, so our "is this our own
+      // write?" check failed on fractional scroll positions (any real touch
+      // scroll) and the rewrite fed on itself, snapping the photo to ~0 and
+      // back several times per swipe on phones. Now the CSS rule below pins
+      // the element's transform to a custom property (!important, so
+      // Framer's writes no longer matter) and this is the only thing that
+      // ever changes that property — no observers, nothing to fight.
+      var avatHeroParallaxBound = false;
+      function avatHeroParallaxUpdate() {
+        var w = window.innerWidth;
+        var y = Math.min(window.pageYOffset || 0, 1200);
+        var offset = w < 810 ? -0.245 * y : ((w < 1200 ? -60 : -150) - 0.5 * y);
+        var value = (Math.round(offset * 10) / 10) + 'px';
         document.querySelectorAll('.framer-1vge7ew').forEach(function (el) {
-          if (el.dataset.avatLiftObserved) return;
-          el.dataset.avatLiftObserved = '1';
-          new MutationObserver(function (records) {
-            records.forEach(function (r) { handle(r.target); });
-          }).observe(el, { attributes: true, attributeFilter: ['style'] });
-          handle(el);
+          if (el.style.getPropertyValue('--avat-hero-y') !== value) el.style.setProperty('--avat-hero-y', value);
         });
+      }
+      function initHeroParallax() {
+        avatHeroParallaxUpdate();
+        if (avatHeroParallaxBound) return;
+        avatHeroParallaxBound = true;
+        var frame = false;
+        function schedule() {
+          if (frame) return;
+          frame = true;
+          requestAnimationFrame(function () { frame = false; avatHeroParallaxUpdate(); });
+        }
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
       }
 
       function patch() {
@@ -13018,7 +13026,7 @@
         insertPropertyCards();
         insertFaqAccordion();
         insertDocuments();
-        initHeroLift();
+        initHeroParallax();
       }
 
       var avatNavObserverStarted = false;
@@ -13035,7 +13043,7 @@
           fixNavLinks();
           forceFooterImages();
           applyTypeHero();
-          initHeroLift();
+          initHeroParallax();
           busy = false;
         });
         mo.observe(document.body, { childList: true, subtree: true });
