@@ -18,6 +18,22 @@ class SiteSettings(models.Model):
         max_length=200, blank=True, default="Токтогула 147, кабинет 40",
         verbose_name="Адрес офиса",
     )
+    instagram_url = models.URLField(
+        blank=True, verbose_name="Instagram",
+        help_text="Ссылка на профиль, например https://www.instagram.com/avat365/. Если пусто — иконка в футере скрывается.",
+    )
+    facebook_url = models.URLField(
+        blank=True, verbose_name="Facebook",
+        help_text="Ссылка на страницу, например https://www.facebook.com/avat365. Если пусто — иконка в футере скрывается.",
+    )
+    x_url = models.URLField(
+        blank=True, verbose_name="X (Twitter)",
+        help_text="Ссылка на профиль, например https://x.com/avat365. Если пусто — иконка в футере скрывается.",
+    )
+    youtube_url = models.URLField(
+        blank=True, verbose_name="YouTube",
+        help_text="Ссылка на канал, например https://www.youtube.com/@avat365. Если пусто — иконка в футере скрывается.",
+    )
     apartments_hero_image = models.ImageField(
         upload_to="site/", blank=True, null=True,
         verbose_name="Фон первого экрана — Апартаменты",

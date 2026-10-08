@@ -16,4 +16,5 @@ urlpatterns = [
     path("contact-us.html", views.contact_us, name="contact_us"),
     path("about-us.html", views.about_us, name="about_us"),
     path("api/leads/", views.lead_create, name="lead_create"),
+    path("api/site-links/", views.site_links, name="site_links"),
 ]

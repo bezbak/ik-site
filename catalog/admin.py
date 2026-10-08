@@ -97,6 +97,10 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ("phone_number", "whatsapp_number", "address")
     fieldsets = (
         ("Контакты", {"fields": ("phone_number", "whatsapp_number", "address")}),
+        ("Соцсети в футере", {
+            "description": "Иконки в футере сайта. Если ссылка не заполнена — иконка не показывается.",
+            "fields": ("instagram_url", "facebook_url", "x_url", "youtube_url"),
+        }),
         ("Страница «Апартаменты» (/apartments/)", {
             "fields": ("apartments_hero_image", "apartments_hero_preview"),
         }),

@@ -221,6 +221,18 @@ def about_us(request):
     return render(request, "about_us.html", context)
 
 
+def site_links(request):
+    """Footer social links, read by /js/avat-footer.js on every page (including
+    the static export pages in public/, which can't use template variables)."""
+    s = SiteSettings.load()
+    return JsonResponse({
+        "instagram": s.instagram_url,
+        "facebook": s.facebook_url,
+        "x": s.x_url,
+        "youtube": s.youtube_url,
+    })
+
+
 @csrf_exempt
 @require_POST
 def lead_create(request):
