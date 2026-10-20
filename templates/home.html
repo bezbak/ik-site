@@ -8115,6 +8115,12 @@
   a[data-framer-name="Black Logo"] .framer-5shdbp > *,
   a[data-framer-name="White Logo"] .framer-5shdbp > *{visibility:hidden}
 </style>
+<style id="avat-hero-smoke-style">
+  /* The decorative smoke layers sit above the hero buttons (z-index 2) and
+     swallow taps on their upper-left part on phones. Purely visual, so let
+     clicks fall through to the buttons. */
+  [data-framer-name="Hero Smoke Image"]{pointer-events:none!important}
+</style>
 <style id="avat-sport-card-style">
   /* SPORT infrastructure card: plain dark navy, no photo — the aerial shot
      didn't read well here. The Image box's src is the only thing that
@@ -12895,41 +12901,7 @@
         });
       }
 
-      // The mobile/tablet menu overlay mounts one "Links" list per responsive
-      // breakpoint variant (like the ssr-variant blocks elsewhere on the
-      // page), but the CSS that hides all but the active variant is only
-      // emitted for markup present in the static export — this overlay is
-      // client-rendered only, so that CSS never made it into the page and
-      // every variant stacks up visibly, duplicating menu items. Keep
-      // whichever sibling copy has the most links (the real, complete menu)
-      // under each parent and hide the rest.
-      function dedupeMenuLinks() {
-        var groups = [];
-        document.querySelectorAll('.framer-eumtsr-container [data-framer-name="Links"]').forEach(function (el) {
-          var parent = el.parentElement;
-          if (!parent) return;
-          var group = null;
-          for (var i = 0; i < groups.length; i++) {
-            if (groups[i].parent === parent) { group = groups[i]; break; }
-          }
-          if (!group) { group = { parent: parent, items: [] }; groups.push(group); }
-          group.items.push(el);
-        });
-        groups.forEach(function (group) {
-          if (group.items.length < 2) return;
-          var best = group.items[0];
-          group.items.forEach(function (el) {
-            if (el.children.length > best.children.length) best = el;
-          });
-          group.items.forEach(function (el) {
-            if (el === best) el.style.removeProperty('display');
-            else el.style.setProperty('display', 'none', 'important');
-          });
-        });
-      }
-
       function fixNavLinks() {
-        dedupeMenuLinks();
         insertTypeNavLinks();
         var homeUrl = '{% url "catalog:home" %}';
         var labelMap = {
