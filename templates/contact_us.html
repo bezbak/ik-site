@@ -12832,6 +12832,7 @@
             var a = clone.querySelector('a');
             var p = clone.querySelector('p');
             delete a.dataset.avatForced;
+            clone.setAttribute('data-avat-nav-clone', '');
             a.setAttribute('href', item.url);
             p.textContent = item.label;
             after.parentNode.insertBefore(clone, after.nextSibling);

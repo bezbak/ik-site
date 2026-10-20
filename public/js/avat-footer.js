@@ -4,6 +4,8 @@
  *  - keeps the page <title> the server rendered (Framer's runtime rewrites it
  *    to the title baked into its bundle, e.g. "Homy - About Us | ...");
  *  - hides the duplicated link lists in the phone menu overlay;
+ *  - gives the Apartments/Cottages items the pages add to the header nav the
+ *    same hover underline as the original items;
  *  - points Framer's extensionless export-time links ("./contact-us") at this
  *    site's real pages;
  *  - removes the leftover "Crafted by <Framer designer>" link;
@@ -27,6 +29,15 @@
   function updateCss() {
     var css = '[data-framer-name="Crafted By"]{display:none!important}' +
       '[data-avat-dup]{display:none!important}';
+    // Header nav items the pages add by cloning "ПЛАНИРОВКИ" (Apartments,
+    // Cottages): Framer drives the original's hover underline from React
+    // state (a .hover class plus a motion-animated "Fill" bar), which a cloned
+    // node never gets, so replay the same slide-in/fade/colour with CSS.
+    css += '.framer-eumtsr-container [data-avat-nav-clone] a [data-framer-name="Fill"]{' +
+      'opacity:0!important;background-color:#fff!important;' +
+      'transition:left 1s cubic-bezier(.2,.9,.2,1),opacity 1s cubic-bezier(.2,.9,.2,1),background-color 1s cubic-bezier(.2,.9,.2,1)}' +
+      '.framer-eumtsr-container [data-avat-nav-clone] a:hover [data-framer-name="Fill"]{' +
+      'left:0;opacity:1!important;background-color:rgb(16,40,78)!important}';
     // Phone footer: the exported layout leaves a ~100px empty band between the
     // CTA button and the logo (64px bottom padding + a 80px-tall logo box).
     css += '@media (max-width:809.98px){' +
