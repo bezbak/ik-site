@@ -8102,19 +8102,6 @@
   .framer-fbxftr-container [data-framer-name="CTA Wrapper"] a[data-framer-name="Main/Black"] [data-framer-name="Arrow"]{background-color:#10284E !important}
   .framer-fbxftr-container [data-framer-name="CTA Wrapper"] a[data-framer-name="Main/Black"] [data-framer-name="Arrow"] svg{--21h8s6:#fff !important}
 </style>
-<style id="avat-logo-style">
-  /* Header/footer logo: when Framer hydrates it re-renders its own "Homy"
-     wordmark into the logo box. The AVAT <img> used to be put back by a
-     script only after the window "load" event, so every reload flashed the
-     old logo. Paint AVAT from CSS instead — it is always on, whatever Framer
-     re-renders — and hide anything Framer puts inside the box. */
-  a[data-framer-name="Black Logo"] .framer-5shdbp,
-  a[data-framer-name="White Logo"] .framer-5shdbp{background:center / contain no-repeat}
-  a[data-framer-name="Black Logo"] .framer-5shdbp{background-image:url("/img/logo-blue.png")}
-  a[data-framer-name="White Logo"] .framer-5shdbp{background-image:url("/img/logo-white.png")}
-  a[data-framer-name="Black Logo"] .framer-5shdbp > *,
-  a[data-framer-name="White Logo"] .framer-5shdbp > *{visibility:hidden}
-</style>
 <style id="avat-hero-smoke-style">
   /* The decorative smoke layers sit above the hero buttons (z-index 2) and
      swallow taps on their upper-left part on phones. Purely visual, so let
@@ -8160,6 +8147,7 @@
     mask-image:linear-gradient(180deg, transparent 0%, transparent 8%, #000 42%)
   }
 </style>
+<link rel="stylesheet" href="/css/avat-logo.css">
 </head>
 
 <body>

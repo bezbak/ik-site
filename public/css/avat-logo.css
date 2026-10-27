@@ -1,0 +1,32 @@
+/* Header/footer logo, shared by every page (Django templates and the static
+   export pages in public/).
+
+   When Framer hydrates it re-renders its own "Homy" wordmark into the logo
+   box, and the AVAT logo used to be swapped in by a script only after the
+   window "load" event, so every reload flashed the old logo first. Paint AVAT
+   from CSS instead (always on, whatever Framer re-renders, and loaded in
+   <head> so it is there for the first paint) and hide anything Framer puts
+   inside the box.
+
+   Framer also marks the logo box `image-rendering: pixelated`, which makes
+   the PNG look jagged when it is scaled down, so force smooth scaling. */
+a[data-framer-name="Black Logo"] [data-framer-component-type="SVG"],
+a[data-framer-name="White Logo"] [data-framer-component-type="SVG"] {
+  background: center / contain no-repeat;
+  image-rendering: auto !important;
+}
+a[data-framer-name="Black Logo"] [data-framer-component-type="SVG"] {
+  background-image: url("/img/logo-blue.png");
+}
+a[data-framer-name="White Logo"] [data-framer-component-type="SVG"] {
+  background-image: url("/img/logo-white.png");
+}
+a[data-framer-name="Black Logo"] [data-framer-component-type="SVG"] > *,
+a[data-framer-name="White Logo"] [data-framer-component-type="SVG"] > * {
+  visibility: hidden;
+}
+
+/* Large wordmark on the static legacy pages (swapped in as an <img>). */
+[data-framer-name="Logo Container"] img {
+  image-rendering: auto !important;
+}
