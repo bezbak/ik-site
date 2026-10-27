@@ -8,18 +8,20 @@
    <head> so it is there for the first paint) and hide anything Framer puts
    inside the box.
 
-   Framer also marks the logo box `image-rendering: pixelated`, which makes
-   the PNG look jagged when it is scaled down, so force smooth scaling. */
+   The logos are SVG so they stay sharp at any size and pixel density
+   (the previous PNGs were scaled down by the browser; Framer also marks the
+   logo box `image-rendering: pixelated`, which made them look jagged, so
+   smooth scaling is forced for any raster that still ends up in there). */
 a[data-framer-name="Black Logo"] [data-framer-component-type="SVG"],
 a[data-framer-name="White Logo"] [data-framer-component-type="SVG"] {
   background: center / contain no-repeat;
   image-rendering: auto !important;
 }
 a[data-framer-name="Black Logo"] [data-framer-component-type="SVG"] {
-  background-image: url("/img/logo-blue.png");
+  background-image: url("/img/logo-blue.svg");
 }
 a[data-framer-name="White Logo"] [data-framer-component-type="SVG"] {
-  background-image: url("/img/logo-white.png");
+  background-image: url("/img/logo-white.svg");
 }
 a[data-framer-name="Black Logo"] [data-framer-component-type="SVG"] > *,
 a[data-framer-name="White Logo"] [data-framer-component-type="SVG"] > * {
